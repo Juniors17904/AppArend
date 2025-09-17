@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@android:color/white">
+
+    <!-- Título de la pantalla -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Agregar Nuevo Trabajo"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Información del cliente -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cliente"
+        android:textSize="18sp"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre del Cliente"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Descripción del trabajo -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripción"
+        android:textSize="18sp"
+        android:layout_marginBottom="4dp"/>
+
+    <EditText
+        android:id="@+id/etDescripcion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Descripción del trabajo"
+        android:inputType="text"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Fecha y Hora actuales -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha y Hora"
+        android:textSize="18sp"
+        android:layout_marginBottom="4dp"/>
+
+    <TextView
+        android:id="@+id/tvFechaHora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Fecha: 2025-09-14, Hora: 14:00"
+        android:textSize="16sp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Botón para agregar estructura -->
+    <Button
+        android:id="@+id/btnAgregarEstructura"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Agregar Estructura"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- RecyclerView para mostrar las piezas y estructuras -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lista"
+        android:textSize="18sp"
+        android:layout_marginBottom="8dp"/>
+    <!-- Cabecera fija -->
+    <include layout="@layout/header_estructuras"/>
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPiezas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Total de estructuras, metros cuadrados y monto -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <TextView
+            android:id="@+id/tvCantidadEstructuras"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Estructuras: 0"
+            android:textSize="16sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvMetrosCuadrados"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="M²: 0"
+            android:textSize="16sp"
+            android:gravity="center"/>
+
+        <TextView
+            android:id="@+id/tvMontoTotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Monto Total: S/ 0.00"
+            android:textSize="16sp"
+            android:gravity="center"/>
+    </LinearLayout>
+
+    <!-- Botón para generar reporte -->
+    <Button
+        android:id="@+id/btnGenerarReporte"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Generar Reporte"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Botón para finalizar -->
+    <Button
+        android:id="@+id/btnFinalizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Finalizar"/>
+
+</LinearLayout>
