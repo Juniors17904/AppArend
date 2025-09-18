@@ -6,7 +6,7 @@
     android:background="@android:color/white">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -14,62 +14,65 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
             android:text="Agregar Estructura"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold" />
 
         <!-- Vista previa de imagen -->
         <ImageView
             android:id="@+id/imgPreview"
             android:layout_width="match_parent"
             android:layout_height="500dp"
-            android:scaleType="centerCrop"
+            android:layout_marginBottom="8dp"
             android:background="#f0f0f0"
-            android:visibility="gone"
-            android:layout_marginBottom="8dp"/>
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
 
         <!-- Contenedor para Descripción y Botones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
 
             <!-- Descripción -->
             <EditText
                 android:id="@+id/etDescripcion"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:hint="Descripción de la estructura..."
-                android:gravity="start"
                 android:inputType="textMultiLine"
-                android:imeOptions="actionNext"
-                android:singleLine="false"
-                android:layout_marginEnd="8dp"/>
+                android:maxLines="3"
+                android:gravity="top|start"
+                android:scrollbars="vertical"
+                android:lineSpacingExtra="4dp"
+                android:imeOptions="actionDone"
+            />
 
             <!-- Botón para agregar imagen -->
             <Button
                 android:id="@+id/btnAgregarImagen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="➕"
-                android:textSize="18sp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"/>
+                android:layout_marginStart="8dp"
+                android:text="Agregar Imagen"
+                android:textSize="18sp" />
 
             <!-- Botón para borrar imagen -->
             <Button
                 android:id="@+id/btnBorrarImagen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
                 android:text="🗑️"
                 android:textSize="18sp"
-                android:visibility="gone"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"/>
+                android:visibility="gone" />
         </LinearLayout>
 
         <!-- Botón para agregar pieza -->
@@ -77,17 +80,16 @@
             android:id="@+id/btnAgregarPieza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="➕ Agregar Pieza"
-            android:layout_marginBottom="16dp"/>
-
+            android:layout_marginBottom="16dp"
+            android:text="➕ Agregar Pieza" />
 
 
         <!-- Cabecera de la tabla -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="#A0A7D5"
             android:orientation="horizontal"
-            android:background="#3F51B5"
             android:padding="8dp">
 
             <TextView
@@ -96,58 +98,58 @@
                 android:layout_weight="2"
                 android:text="Tipo Material"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Cant"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                android:gravity="center"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Largo"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                android:gravity="center"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Ancho"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                android:gravity="center"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Total m²"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                android:gravity="center"/>
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:text="Acciones"
                 android:textColor="@android:color/white"
-                android:textStyle="bold"
                 android:textSize="12sp"
-                android:gravity="center"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
         <!-- RecyclerView para items -->
@@ -155,7 +157,7 @@
             android:id="@+id/recyclerViewItems"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_marginBottom="16dp"/>
+            android:layout_marginBottom="16dp" />
 
         <!-- Botón Finalizar -->
         <Button
@@ -163,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Finalizar Estructura"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>

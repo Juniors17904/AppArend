@@ -1,7 +1,10 @@
 package com.example.apparend;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +17,9 @@ import java.util.List;
 
 public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
 
+    private static final String TAG = "arenado";
+
+
     EditText etCliente, etDescripcion;
     Button btnAgregarEstructura, btnGenerarReporte, btnFinalizar;
     TextView tvCantidadEstructuras, tvMetrosCuadrados, tvMontoTotal;
@@ -25,6 +31,8 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
     RecyclerView recyclerViewPiezas;
     PiezaAdapter piezaAdapter;
     List<Pieza> listaPiezas = new ArrayList<>();
+    TextView tvFechaHora;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +49,9 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
         tvMetrosCuadrados = findViewById(R.id.tvMetrosCuadrados);
         tvMontoTotal = findViewById(R.id.tvMontoTotal);
 
-        // RecyclerView - CONSTRUCTOR MODIFICADO (3 parámetros)
+
         recyclerViewPiezas = findViewById(R.id.recyclerViewPiezas);
         recyclerViewPiezas.setLayoutManager(new LinearLayoutManager(this));
-
         piezaAdapter = new PiezaAdapter(listaPiezas, this, new PiezaAdapter.OnItemClickListener() {
             @Override
             public void onEditClick(Pieza pieza, int position) {
@@ -65,14 +72,22 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
                 actualizarTotales();
             }
         });
-
         recyclerViewPiezas.setAdapter(piezaAdapter);
+        tvFechaHora = findViewById(R.id.tvFechaHora);
+
+        // Obtener la fecha y hora actuales
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy   HH:mm");
+        String currentDateAndTime = dateFormat.format(new Date());
+
+        tvFechaHora.setText(currentDateAndTime);
 
         // Lógica de agregar estructura
         btnAgregarEstructura.setOnClickListener(v -> {
-            // Redirige a la pantalla para agregar una nueva estructura
+
             Intent intent = new Intent(AgregarNuevoTrabajoActivity.this, AgregarEstructuraActivity.class);
-            startActivityForResult(intent, 1); // Usar startActivityForResult para recibir datos
+            startActivity(intent);
+
+            Log.d(TAG, "btn agregar estructura");
         });
 
         // Lógica para generar el reporte
@@ -141,4 +156,9 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
         piezaAdapter.notifyDataSetChanged();
         actualizarTotales();
     }
+
+
+
+
+
 }

@@ -1,250 +1,220 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:background="@android:color/white">
-
-    <!-- Título -->
-    <TextView
-        android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"> <!-- Guideline vertical al 50% -->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineVertical"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Agregar Estructura"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.43" /> <!-- Título -->
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Agregar Pieza"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:textColor="#1d4ed8"
-        android:layout_marginBottom="16dp"/>
-
-    <!-- Selector de material -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Tipo de Material:"
-            android:textStyle="bold"
-            android:textColor="#374151"/>
-
-        <Spinner
-            android:id="@+id/spinnerMaterial"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1.5"
-            android:background="@android:drawable/btn_dropdown"/>
-    </LinearLayout>
-
-    <!-- Dimensiones -->
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" /> <!-- LABEL Y SPINNER PERFILES (MITAD IZQUIERDA) -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/lblPerfiles"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Dimensiones (mm):"
+        android:layout_marginTop="24dp"
+        android:text="Perfiles:"
         android:textStyle="bold"
-        android:textColor="#374151"
-        android:layout_marginBottom="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <Spinner
+        android:id="@+id/spinnerMaterial"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:weightSum="4">
-
-        <EditText
-            android:id="@+id/etAncho"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:hint="Ancho"
-            android:imeOptions="actionNext"
-            android:inputType="numberDecimal"
-            android:gravity="center"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginEnd="4dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="×"
-            android:textSize="18sp"
-            android:textColor="#6b7280"
-            android:layout_gravity="center_vertical"
-            android:padding="4dp"/>
-
-        <EditText
-            android:id="@+id/etAlto"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:hint="Alto"
-            android:imeOptions="actionNext"
-            android:inputType="numberDecimal"
-            android:gravity="center"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginStart="4dp"
-            android:layout_marginEnd="4dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="×"
-            android:textSize="18sp"
-            android:textColor="#6b7280"
-            android:layout_gravity="center_vertical"
-            android:padding="4dp"/>
-
-        <EditText
-            android:id="@+id/etLargo"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:hint="Largo (m)"
-            android:imeOptions="actionDone"
-            android:inputType="numberDecimal"
-            android:gravity="center"
-            android:background="@android:drawable/edit_text"
-            android:layout_marginStart="4dp"/>
-    </LinearLayout>
-
-    <!-- Cantidad -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cantidad:"
-            android:textStyle="bold"
-            android:textColor="#374151"/>
-
-        <EditText
-            android:id="@+id/etCantidad"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:imeOptions="actionNext"
-            android:hint="1"
-            android:gravity="center"
-            android:background="@android:drawable/edit_text"/>
-    </LinearLayout>
-
-    <!-- Descripción -->
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toStartOf="@id/guidelineVertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblPerfiles" /> <!-- LABEL Y SPINNER DIMENSIONES (MITAD DERECHA) --> <!-- CAMPOS LADO 1 Y LADO 2 (MITAD DERECHA) -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/lblDimensiones"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Dimension:"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/spinnerUnidades"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
+
+    <Spinner
+        android:id="@+id/spinnerUnidades"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:entries="@array/unidades"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/lblDimensiones"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
+
+    <EditText
+        android:id="@+id/etAncho"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:hint="Lado 1"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toStartOf="@+id/textX"
+        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+
+    <TextView
+        android:id="@+id/textX"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="x"
+        app:layout_constraintEnd_toStartOf="@+id/etAlto"
+        app:layout_constraintStart_toEndOf="@id/etAncho"
+        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+
+    <EditText
+        android:id="@+id/etAlto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:hint="Lado 2"
+        android:inputType="numberDecimal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/textX"
+        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" /> <!-- Largo -->
+    <TextView
+        android:id="@+id/lblLargo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Largo:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etAncho" /> <!-- Cantidad --> <EditText
+        android:id="@+id/etLargo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="   Ingrese largo    "
+        android:inputType="numberDecimal"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/lblLargo"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toTopOf="@id/lblLargo"
+        app:layout_constraintVertical_bias="0.476" />
+
+    <TextView
+        android:id="@+id/lblCantidad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Cantidad:"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etLargo" />
+
+    <EditText
+        android:id="@+id/etCantidad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:hint="Ingrese cantidad"
+        android:inputType="number"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@id/lblCantidad"
+        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toTopOf="@id/lblCantidad" /> <!-- Descripción --> <TextView
+        android:id="@+id/lblDescripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Descripción:"
         android:textStyle="bold"
-        android:textColor="#374151"
-        android:layout_marginBottom="8dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etCantidad" />
 
     <EditText
         android:id="@+id/etDescripcion"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:hint="Tipo de estructura"
-        android:background="@android:drawable/edit_text"
-        android:padding="12dp"/>
-
-    <!-- Botón de calcular -->
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:hint="Descripción (opcional)"
+        android:padding="12dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblDescripcion" /> <!-- Botón Calcular y CheckBox -->
+    <Button
+        android:id="@+id/btnCalcular"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="16dp"
-        android:gravity="center">
+        android:layout_marginTop="24dp"
+        android:text="Calcular Total m²"
+        app:layout_constraintEnd_toStartOf="@id/cbRecordar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/etDescripcion" />
 
-        <Button
-            android:id="@+id/btnCalcular"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:text="Calcular Total m²"
-            android:textAllCaps="false"
-            android:background="#2563eb"
-            android:textColor="@android:color/white"
-            android:layout_marginEnd="8dp"/>
-
-        <CheckBox
-            android:id="@+id/cbRecordar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recordar"
-            android:textSize="12sp"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
-
-    <!-- Resultado -->
-    <LinearLayout
-        android:layout_width="match_parent"
+    <CheckBox
+        android:id="@+id/cbRecordar"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="#f0f9ff"
-        android:padding="16dp"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Total:"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#374151"/>
-
-        <TextView
-            android:id="@+id/tvTotalM2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.00 m²"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#1d4ed8"/>
-    </LinearLayout>
-
-    <!-- Botones de acción -->
-    <LinearLayout
-        android:layout_width="match_parent"
+        android:text="Recordar"
+        app:layout_constraintBottom_toBottomOf="@id/btnCalcular"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnCalcular"
+        app:layout_constraintTop_toTopOf="@id/btnCalcular" /> <!-- Total --> <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="20dp"
-        android:weightSum="2">
+        android:layout_marginTop="24dp"
+        android:text="Total:"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnCalcular" />
 
-        <Button
-            android:id="@+id/btnCancelar"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:text="Cancelar"
-            android:textAllCaps="false"
-            android:background="#f5f5f5"
-            android:textColor="#6b7280"
-            android:layout_marginEnd="8dp"/>
+    <TextView
+        android:id="@+id/tvTotalM2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:text="0.00 m²"
+        android:textColor="#1d4ed8"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/tvTotal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTotal"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <Button
-            android:id="@+id/btnAgregar"
-            android:layout_width="0dp"
-            android:layout_height="45dp"
-            android:layout_weight="1"
-            android:text="Agregar"
-            android:textAllCaps="false"
-            android:background="#2563eb"
-            android:textColor="@android:color/white"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:id="@+id/textViewM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(m)"
+        app:layout_constraintBottom_toBottomOf="@+id/etLargo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etLargo"
+        app:layout_constraintTop_toTopOf="@+id/etLargo" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(unid)"
+        app:layout_constraintBottom_toBottomOf="@+id/etCantidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/etCantidad"
+        app:layout_constraintTop_toTopOf="@+id/etCantidad" />
+</androidx.constraintlayout.widget.ConstraintLayout>

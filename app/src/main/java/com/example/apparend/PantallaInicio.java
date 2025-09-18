@@ -33,6 +33,6 @@ public class PantallaInicio extends AppCompatActivity {
                 finish(); // Finaliza PantallaInicio para que no vuelva atrás
                 Log.d(TAG, "Pantalla de inicio finalizada.");
             }
-        }, 2500); // 5000 milisegundos = 5 segundos
+        }, 1000); // 5000 milisegundos = 5 segundos
     }
 }
