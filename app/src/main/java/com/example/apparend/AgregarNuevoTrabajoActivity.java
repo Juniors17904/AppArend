@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
 
-    private static final String TAG = "arenado";
+    private static final String TAG = "arenado Agregar Nuevo Trabajo";
 
 
     EditText etCliente, etDescripcion;

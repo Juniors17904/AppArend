@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String TAG = "arenado"; // Definimos el tag "arenado" para los logs
+    private static final String TAG = "arenado Main Activity"; // Definimos el tag "arenado" para los logs
 
     Button btnNuevoTrabajo, btnHistorial;
 

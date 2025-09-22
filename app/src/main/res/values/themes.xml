@@ -2,7 +2,10 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.AppArend" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item>
+        CAMBIADO POR MURRUGARRA VALLENAS JUNIORS-->
+        <item name="colorPrimary">@color/black</item>
+        <item name="colorSecondary">@color/black</item>
     </style>
 
     <style name="Theme.AppArend" parent="Base.Theme.AppArend" />

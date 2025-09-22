@@ -1,6 +1,8 @@
 package com.example.apparend;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,11 +19,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,9 +45,10 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
 
     private static final int REQUEST_CAMERA = 1;
     private static final int REQUEST_GALLERY = 2;
-    private static final String TAG = "arenado";
+    private static final int REQUEST_CROP_IMAGE = 3;
+    private static final String TAG = "arenado Agregar Estructuras";
 
-    private Button btnAgregarImagen, btnFinalizarEstructura, btnAgregarPieza;
+    private Button btnBorrarImagen,btnAgregarImagen, btnFinalizarEstructura, btnAgregarPieza;
     private ImageView imgPreview;
     private EditText etDescripcion;
     private RecyclerView recyclerViewItems;
@@ -58,8 +68,10 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
 
         // Inicializar vistas
         btnAgregarImagen = findViewById(R.id.btnAgregarImagen);
+        btnBorrarImagen = findViewById(R.id.btnBorrarImagen);
         imgPreview = findViewById(R.id.imgPreview);
         etDescripcion = findViewById(R.id.etDescripcion);
+
         recyclerViewItems = findViewById(R.id.recyclerViewItems);
         btnFinalizarEstructura = findViewById(R.id.btnFinalizarEstructura);
         btnAgregarPieza = findViewById(R.id.btnAgregarPieza);
@@ -81,222 +93,46 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
 
         // Configurar botones
         btnAgregarPieza.setOnClickListener(v -> {
-            Log.d(TAG, "btn agregar pieza");
-            mostrarFormularioAgregarPieza();
+            Log.d(TAG, "btn detallar (agregar pieza)");
+            //mostrarFormularioAgregarPieza();
+
+            if (photoUri != null) {
+                Intent intent = new Intent(this, VisorCotasActivity.class);
+                intent.putExtra("imagenUri", photoUri.toString());
+                //startActivity(intent);
+                startActivityForResult(intent, REQUEST_CROP_IMAGE);
+            } else {
+                Toast.makeText(this, "Agrega primero una imagen", Toast.LENGTH_SHORT).show();
+            }
+
+
         });
+
+        btnBorrarImagen.setOnClickListener(v -> {
+            Log.d(TAG, "btn borrar: ");
+                borrarImagen();
+
+        });
+
 
         btnAgregarImagen.setOnClickListener(v -> {
-            Log.d(TAG, "Agregar imagen: ");
-            if (photoUri == null) {
+            Log.d(TAG, "btn Agregar: ");
                 mostrarOpcionesImagen();
-            } else {
-                borrarImagen();
-            }
         });
 
-        btnFinalizarEstructura.setOnClickListener(v -> guardarEstructura());
+
+
+
+
+
+        btnFinalizarEstructura.setOnClickListener(v -> {
+            Log.d(TAG, "btn finalizar: ");
+            guardarEstructura();
+        });
+
     }
 
     // Método para mostrar el formulario emergente
-    private void mOostrarFormularioAgregarPieza() {
-
-        Log.d(TAG, "inflando");
-        // Inflar el layout personalizado
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_agregar_pieza, null);
-
-        // Obtener referencias a las vistas
-        final Spinner spinnerMaterial = dialogView.findViewById(R.id.spinnerMaterial);
-        final Spinner spinnerUnidades = dialogView.findViewById(R.id.spinnerUnidades);
-        final EditText etAncho = dialogView.findViewById(R.id.etAncho);
-        final TextView textX = dialogView.findViewById(R.id.textX);
-        final EditText etAlto = dialogView.findViewById(R.id.etAlto);
-        final EditText etLargo = dialogView.findViewById(R.id.etLargo);
-        final EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
-        final TextView tvTotalM2 = dialogView.findViewById(R.id.tvTotalM2);
-        final Button btnCalcular = dialogView.findViewById(R.id.btnCalcular);
-        final TextView lblLargo = dialogView.findViewById(R.id.lblLargo);
-        final TextView textViewM = dialogView.findViewById(R.id.textViewM);
-
-
-
-        // Configurar spinner
-        final String[] tiposMaterial = {"Cuadrado", "Circular", "Plancha", "Ángulo" ,"Viga H " ,"Otro"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, tiposMaterial);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMaterial.setAdapter(adapter);
-
-        // Configurar botón de calcular
-        btnCalcular.setOnClickListener(v -> {
-            Log.d(TAG, "btn calculando");
-            try {
-                String material = spinnerMaterial.getSelectedItem().toString();
-                float ancho = 0, alto = 0, largo = 0;
-                int cantidad = Integer.parseInt(etCantidad.getText().toString());
-
-                // Capturar valores según el material
-                switch (material) {
-                    case "Cuadrado":
-                    case "Ángulo":
-                        ancho = Float.parseFloat(etAncho.getText().toString());
-                        alto = Float.parseFloat(etAlto.getText().toString());
-                        largo = Float.parseFloat(etLargo.getText().toString());
-                        break;
-
-                    case "Circular":
-                        ancho = Float.parseFloat(etAncho.getText().toString()); // radio
-                        largo = Float.parseFloat(etLargo.getText().toString());
-                        break;
-
-                    case "Plancha":
-                        ancho = Float.parseFloat(etAncho.getText().toString());
-                        alto = Float.parseFloat(etAlto.getText().toString());
-                        break;
-
-                    default:
-                        ancho = Float.parseFloat(etAncho.getText().toString());
-                        alto = Float.parseFloat(etAlto.getText().toString());
-                        largo = Float.parseFloat(etLargo.getText().toString());
-                        break;
-                }
-
-                // Calcular área
-                float areaPorPieza = calcularArea(material, ancho, alto, largo);
-                float totalM2 = areaPorPieza * cantidad;
-
-                tvTotalM2.setText(String.format("Total m²: %.3f", totalM2));
-
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Por favor, complete todos los campos correctamente", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-
-        // Crear y mostrar el diálogo
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(dialogView)
-                .setPositiveButton("Agregar", (dialog, which) -> {
-                    try {
-                        String tipoMaterial = spinnerMaterial.getSelectedItem().toString();
-                        float ancho = Float.parseFloat(etAncho.getText().toString());
-                        float alto = Float.parseFloat(etAlto.getText().toString());
-                        float largo = Float.parseFloat(etLargo.getText().toString());
-                        int cantidad = Integer.parseInt(etCantidad.getText().toString());
-
-                        // Formatear dimensiones para mostrar
-                        String dimensiones = String.format("%.0f\" x %.0f\" x %.0fm", ancho, alto, largo);
-
-                        // Calcular área total
-                        float areaPorPieza = calcularArea(tipoMaterial, ancho, alto, largo);
-                        float totalM2 = areaPorPieza * cantidad;
-
-                        // Agregar a la lista
-                        listaPiezas.add(new Pieza(tipoMaterial, dimensiones, cantidad, totalM2));
-                        piezaAdapter.notifyDataSetChanged();
-
-                        Toast.makeText(this, "Pieza agregada correctamente", Toast.LENGTH_SHORT).show();
-
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .setNegativeButton("Cancelar", null);
-
-        // Crear y mostrar el AlertDialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
-
-
-
-        // Modificar el tamaño del AlertDialog
-//        Log.d(TAG, "modificando tamaño");
-//        dialog.getWindow().setLayout(
-//
-//                (int) (getResources().getDisplayMetrics().widthPixels * 0.99),  // 90% del ancho de la pantalla
-//                (int) (getResources().getDisplayMetrics().heightPixels * 0.95) // 80% de la altura de la pantalla
-//        );
-
-
-
-
-
-
-
-        spinnerMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String seleccionado = parent.getItemAtPosition(position).toString();
-                //Toast.makeText(getApplicationContext(), "Seleccionado: " + seleccionado, Toast.LENGTH_SHORT).show();
-                 Log.d(TAG, "Seleccionado: " + seleccionado);
-
-
-                switch (seleccionado) {
-                    case "Cuadrado":
-                        etAncho.setVisibility(View.VISIBLE);
-                        etAlto.setVisibility(View.VISIBLE);
-                        etAncho.setHint("Lado 1");
-                        etAlto.setHint("Lado 2");
-                        break;
-
-                    case "Circular":
-                        etAncho.setVisibility(View.VISIBLE);
-                        etAlto.setVisibility(View.GONE);
-                        etAncho.setHint("Radio");
-                        textX.setVisibility(View.GONE);
-                        break;
-
-                    case "Plancha":
-                        etAncho.setVisibility(View.VISIBLE);
-                        etAlto.setVisibility(View.VISIBLE);
-                        etAncho.setHint("Ancho");
-                        textX.setVisibility(View.VISIBLE);
-                        etAlto.setHint("Largo");
-                        lblLargo.setVisibility(View.GONE);
-                        etLargo.setVisibility(View.GONE);
-                        textViewM.setVisibility(View.GONE);
-
-
-                        break;
-
-                    default:
-                        etAncho.setVisibility(View.VISIBLE);
-                        etAlto.setVisibility(View.VISIBLE);
-                        etAncho.setHint("Lado 1");
-                        etAlto.setHint("Lado 2");
-                        break;
-                }
-
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Aquí no haces nada normalmente
-            }
-        });
-
-
-
-        spinnerUnidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String seleccionado = parent.getItemAtPosition(position).toString();
-                //Toast.makeText(getApplicationContext(), "Seleccionado: " + seleccionado, Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Seleccionado: " + seleccionado);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Aquí no haces nada normalmente
-            }
-        });
-
-
-
-
-
-    }
-
     private void mostrarFormularioAgregarPieza() {
         Log.d(TAG, "mostrarFormularioAgregarPieza: inicio - inflando layout");
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_agregar_pieza, null);
@@ -523,37 +359,6 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
         Log.d(TAG, "Dialog mostrado (mostrarFormularioAgregarPieza) - FIN");
     }
 
-
-    private float cCalcularArea(String tipoMaterial, float ancho, float alto, float largo) {
-        // Conversión de pulgadas a metros (1 pulgada = 0.0254 metros)
-        float anchoM = ancho * 0.0254f;
-        float altoM = alto * 0.0254f;
-        float largoM = largo;
-
-        switch (tipoMaterial) {
-            case "Tubo Cuadrado":
-                // Perímetro * largo (4 lados)
-                return 4 * anchoM * largoM;
-            case "Tubo Circular":
-                // Circunferencia * largo (π * diámetro * largo)
-                return (float) (Math.PI * anchoM * largoM);
-            case "Plancha":
-                // Área de ambas caras (ancho * alto * 2)
-                return anchoM * altoM * 2;
-            case "Ángulo":
-                // Perímetro aproximado * largo (suma de los 3 lados visibles)
-                return (anchoM + altoM + Math.max(anchoM, altoM)) * largoM;
-            case "Barra Liza Cuadrada":
-                // Perímetro * largo (4 lados)
-                return 4 * anchoM * largoM;
-            case "Barra Liza Redonda":
-                // Circunferencia * largo
-                return (float) (Math.PI * anchoM * largoM);
-            default:
-                return 0;
-        }
-    }
-
     private float calcularArea(String tipoMaterial, float ancho, float alto, float largo) {
         Log.d(TAG, "calcularArea() llamado con -> material=" + tipoMaterial + ", ancho=" + ancho + ", alto=" + alto + ", largo=" + largo);
 
@@ -593,9 +398,6 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
                 return 0;
         }
     }
-
-
-
 
     private void mostrarOpcionesImagen() {
         Log.d(TAG, "Mostrar opciones");
@@ -650,6 +452,7 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_GALLERY);
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -659,24 +462,90 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
                 if (photoUri != null) {
                     imgPreview.setVisibility(View.VISIBLE);
                     imgPreview.setImageURI(photoUri);
-                    btnAgregarImagen.setText("🗑️ Borrar Imagen");
-                    Toast.makeText(this, "Foto tomada con éxito", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "borrar visible");
+                    btnAgregarImagen.setVisibility(View.GONE);
+                    btnBorrarImagen.setVisibility(View.VISIBLE);
+
+                    Log.d("arenado", "imagen");
+                    Toast.makeText(this, "Imagen agregadaaaaaa", Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == REQUEST_GALLERY) {
                 if (data != null && data.getData() != null) {
                     photoUri = data.getData();
                     imgPreview.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "Imagen agregada");
                     imgPreview.setImageURI(photoUri);
-                    btnAgregarImagen.setText("🗑️ Borrar Imagen");
+
+                    Log.d(TAG, "borrar visible");
+                    btnAgregarImagen.setVisibility(View.GONE);
+                    btnBorrarImagen.setVisibility(View.VISIBLE);
                 }
             }
+            // --- NUEVO: Manejo del resultado del crop --- //
+            else if (requestCode == REQUEST_CROP_IMAGE) {
+                if (data != null && data.hasExtra("imagenUri")) {
+                    String uriString = data.getStringExtra("imagenUri");
+                    photoUri = Uri.parse(uriString);
+                    imgPreview.setVisibility(View.VISIBLE);
+                    imgPreview.setImageURI(photoUri);
+
+                    btnAgregarImagen.setVisibility(View.GONE);
+                    btnBorrarImagen.setVisibility(View.VISIBLE);
+
+                    Log.d(TAG, "Imagen recortada actualizada: " + uriString);
+                }
+            }
+            // -------------------------------------------- //
         }
     }
 
+
+
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (resultCode == RESULT_OK) {
+//            if (requestCode == REQUEST_CAMERA) {
+//                if (photoUri != null) {
+//                    imgPreview.setVisibility(View.VISIBLE);
+//                    imgPreview.setImageURI(photoUri);
+//                    Log.d(TAG, "borrar visible");
+//                    btnAgregarImagen.setVisibility(View.GONE);
+//                    btnBorrarImagen.setVisibility(View.VISIBLE);
+//
+//
+//                    Log.d("arenado", "imagen");
+//                    Toast.makeText(this, "Imagen agregadaaaaaa", Toast.LENGTH_SHORT).show();
+//                }
+//            } else if (requestCode == REQUEST_GALLERY) {
+//                if (data != null && data.getData() != null) {
+//                    photoUri = data.getData();
+//                    imgPreview.setVisibility(View.VISIBLE);
+//                    Log.d(TAG, "Imagen agregada");
+//                    imgPreview.setImageURI(photoUri);
+//
+//                    Log.d(TAG, "borrar visible");
+//                    btnAgregarImagen.setVisibility(View.GONE);
+//                    btnBorrarImagen.setVisibility(View.VISIBLE);
+//
+//
+//                }
+//            }
+//        }
+//
+//    }
+
     private void borrarImagen() {
+
         imgPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(null);
-        btnAgregarImagen.setText("➕ Agregar Imagen");
+        //cambia de imagen a agregar imagen
+
+        btnAgregarImagen.setVisibility(View.VISIBLE);
+        btnBorrarImagen.setVisibility(View.GONE);
 
         // Borrar archivo de foto si existe
         if (photoFile != null && photoFile.exists()) {
@@ -721,16 +590,22 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
     }
 
 
+
+    //Muestra la imagen en el ImageView
     private final ActivityResultLauncher<Intent> cameraLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 if (result.getResultCode() == RESULT_OK && photoUri != null) {
                     imgPreview.setVisibility(View.VISIBLE);
                     imgPreview.setImageURI(photoUri);
-                    btnAgregarImagen.setText("🗑️ Borrar Imagen");
-                    Toast.makeText(this, "Foto tomada con éxito", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "FOTO");
+
+                    btnAgregarImagen.setVisibility(View.GONE);
+                    btnBorrarImagen.setVisibility(View.VISIBLE);
+
+                    Toast.makeText(this, "Foto Agregada", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, "Imagen agregada");
                 }
             });
+
 
 
 

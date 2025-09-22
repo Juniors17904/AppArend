@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Imagen principal - OCUPA EL CENTRO -->
+    <ImageView
+        android:id="@+id/imgVisor"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        app:layout_constraintBottom_toTopOf="@+id/conStDainerButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containerButtons" />
+
+    <!-- Overlay para dibujar cotas -->
+    <com.example.apparend.CotasOverlay
+        android:id="@+id/cotasOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/imgVisor"
+        app:layout_constraintBottom_toBottomOf="@id/imgVisor"
+        app:layout_constraintStart_toStartOf="@id/imgVisor"
+        app:layout_constraintEnd_toEndOf="@id/imgVisor"/>
+
+    <!-- BOTONES SUPERIORES - FUERA DE LA IMAGEN -->
+    <LinearLayout
+        android:id="@+id/containerButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <Button
+            android:id="@+id/btnRecortar"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:icon="@drawable/ic_crop"
+            app:iconSize="32dp" />
+
+        <Button
+            android:id="@+id/btnMedir"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/ic_medir"
+            app:iconSize="32dp" />
+
+        <Button
+            android:id="@+id/btnRetroceder"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/ic_back"
+            app:iconSize="32dp" />
+
+        <Button
+            android:id="@+id/btnGuardar"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/ic_done"
+            app:iconSize="32dp" />
+
+    </LinearLayout>
+
+    <!-- BOTONES INFERIORES - FUERA DE LA IMAGEN -->
+    <LinearLayout
+        android:id="@+id/conStDainerButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Volver"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_arrow_back_24"
+            app:iconSize="32dp" />
+
+        <Button
+            android:id="@+id/btnMedicionPrecisa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Medir"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_search_24"
+            app:iconSize="32dp" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="Guardar"
+            android:visibility="gone"
+            app:icon="@drawable/baseline_check_24"
+            app:iconSize="32dp" />
+
+
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

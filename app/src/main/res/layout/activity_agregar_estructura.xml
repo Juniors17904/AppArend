@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@android:color/white">
+    android:padding="4dp"
+    android:visibility="visible"
+    app:layout_anchorGravity="center_horizontal">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <!-- Título -->
@@ -23,9 +25,11 @@
         <!-- Vista previa de imagen -->
         <ImageView
             android:id="@+id/imgPreview"
-            android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
             android:background="#f0f0f0"
             android:scaleType="centerCrop"
             android:visibility="gone" />
@@ -40,40 +44,43 @@
             <!-- Descripción -->
             <EditText
                 android:id="@+id/etDescripcion"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:hint="Descripción de la estructura..."
-                android:inputType="textMultiLine"
-                android:maxLines="3"
-                android:gravity="top|start"
-                android:scrollbars="vertical"
-                android:lineSpacingExtra="4dp"
                 android:imeOptions="actionDone"
-            />
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="4dp"
+                android:maxLines="3"
+                android:scrollbars="vertical" />
 
-            <!-- Botón para agregar imagen -->
-            <Button
-                android:id="@+id/btnAgregarImagen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:text="Agregar Imagen"
-                android:textSize="18sp" />
+            <!-- Contenedor para superponer botones -->
+            <FrameLayout
+                android:layout_width="126dp"
+                android:layout_height="wrap_content">
 
-            <!-- Botón para borrar imagen -->
-            <Button
-                android:id="@+id/btnBorrarImagen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="8dp"
-                android:text="🗑️"
-                android:textSize="18sp"
-                android:visibility="gone" />
+                <Button
+                    android:id="@+id/btnAgregarImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:icon="@drawable/ic_imagen"
+                    app:iconGravity="textEnd"
+                    app:iconSize="32dp" />
+
+                <Button
+                    android:id="@+id/btnBorrarImagen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:icon="@drawable/ic_bbasura"
+                    app:iconGravity="textEnd"
+                    app:iconSize="32dp" /> <!-- empieza oculto -->
+            </FrameLayout>
+
         </LinearLayout>
+
 
         <!-- Botón para agregar pieza -->
         <Button
@@ -81,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="➕ Agregar Pieza" />
+            android:text=" Detallar " />
 
 
         <!-- Cabecera de la tabla -->

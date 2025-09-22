@@ -9,7 +9,7 @@ import android.widget.ImageView;
 
 public class PantallaInicio extends AppCompatActivity {
 
-    private static final String TAG = "arenado"; // Definimos el tag "arenado" para los logs
+    private static final String TAG = "arenado Pantalla Inicio"; // Definimos el tag "arenado" para los logs
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +33,6 @@ public class PantallaInicio extends AppCompatActivity {
                 finish(); // Finaliza PantallaInicio para que no vuelva atrás
                 Log.d(TAG, "Pantalla de inicio finalizada.");
             }
-        }, 1000); // 5000 milisegundos = 5 segundos
+        }, 2000); // 5000 milisegundos = 5 segundos
     }
 }

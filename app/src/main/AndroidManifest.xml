@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.apparend">
 
+    <!-- Permisos para acceder al almacenamiento -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,33 +15,35 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppArend"
         tools:targetApi="31">
-
+        <activity
+            android:name=".VisorCotasActivity"
+            android:exported="false" />
         <activity
             android:name=".AgregarEstructuraActivity"
             android:exported="false" />
-
         <activity
             android:name=".AgregarNuevoTrabajoActivity"
             android:exported="false" />
-
         <activity
             android:name=".HistorialActivity"
-            android:exported="false" />
-
-        <!-- Pantalla de inicio (Splash) -->
+            android:exported="false" /> <!-- Pantalla de inicio (Splash) -->
         <activity
             android:name=".PantallaInicio"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <!-- Pantalla principal -->
+        </activity> <!-- Pantalla principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name="com.yalantis.ucrop.UCropActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -48,6 +54,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-
     </application>
+
 </manifest>
