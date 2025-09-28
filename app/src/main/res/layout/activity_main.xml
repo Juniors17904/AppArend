@@ -1,34 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
+    android:background="#F9F9F9"
     android:gravity="center">
 
     <!-- Título de la pantalla -->
     <TextView
         android:id="@+id/tvTitulo"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pantalla Principal"
-        android:textSize="24sp"
+        android:textSize="28sp"
+        android:textColor="#333333"
         android:gravity="center"
-        android:layout_marginBottom="32dp"/>
+        android:textStyle="bold"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="sans-serif-medium" />
 
     <!-- Botón para agregar nuevo trabajo -->
     <Button
         android:id="@+id/btnNuevoTrabajo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#4CAF50"
+        android:elevation="4dp"
+        android:padding="12dp"
         android:text="Agregar Nuevo Trabajo"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:cornerRadius="8dp"/>
 
     <!-- Botón para ver historial de trabajos -->
     <Button
         android:id="@+id/btnHistorial"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ver Historial"/>
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#2196F3"
+        android:elevation="4dp"
+        android:padding="12dp"
+        android:text="Ver Historial"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:cornerRadius="8dp" />
 
+
+    <Button
+        android:id="@+id/btnMedidaRapida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#F32121"
+        android:elevation="4dp"
+        android:padding="12dp"
+        android:text="Medida Rapida"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:cornerRadius="8dp" />
 </LinearLayout>

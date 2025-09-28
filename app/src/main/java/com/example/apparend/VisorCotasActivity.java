@@ -1,7 +1,5 @@
 package com.example.apparend;
 
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import androidx.activity.result.ActivityResultLauncher;
@@ -24,34 +25,43 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VisorCotasActivity extends AppCompatActivity {
 
     private static final String TAG = "arenado Visor de Cotas";
     private ImageView imgVisor;
-    private Button btnRecortar,btnMedicionPrecisa,btnRetroceder,btnGuardar ;
+    private Button btnRecortar,btnAgrePunto,btnRetroceder,btnGuardar ;
+    private TextView txtInstruccion;
     private Button btnMedir,btnSave,btnBack;
     private Uri imagenUri;
     private boolean modoMedicionPrecisa = false;
+    private String modoSeleccionado = "linea"; // por defecto
+    private List<Pieza> listaPiezas = new ArrayList<>();
+    private PiezaAdapter piezaAdapter;
+
+
 
     private final ActivityResultLauncher<Intent> cropLauncher =registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    final Uri resultUri = UCrop.getOutput(result.getData());
-                    Log.d(TAG, "Uri devuelto por uCrop: " + resultUri); // 👈 comprobar que no sea null
+        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+            final Uri resultUri = UCrop.getOutput(result.getData());
+            //Log.d(TAG, "Uri devuelto por uCrop: " + resultUri); // 👈 comprobar que no sea null
 
-                    if (resultUri != null) {
-                        imagenUri = resultUri;
-                        imgVisor.setImageURI(imagenUri);
-                        Log.e(TAG, "Imagen cargada en el ImageView: " + imagenUri); // 👈 confirmar carga
-                        Toast.makeText(this, "Imagen recortada", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Log.w(TAG, "Resultado de uCrop es null");
-                        Toast.makeText(this, "Recorte cancelado", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Log.w(TAG, "Resultado de uCrop cancelado o data es null");
-                }
-            });
+            if (resultUri != null) {
+                imagenUri = resultUri;
+                imgVisor.setImageURI(imagenUri);
+                //Log.e(TAG, "Imagen cargada en el ImageView: " + imagenUri); // 👈 confirmar carga
+                Log.e(TAG,"Imagen cargada");
+                Toast.makeText(this, "Imagen recortada", Toast.LENGTH_SHORT).show();
+            } else {
+                Log.w(TAG, "Resultado de uCrop es null");
+                Toast.makeText(this, "Recorte cancelado", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Log.w(TAG, "Resultado de uCrop cancelado o data es null");
+        }
+    });
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,20 +76,59 @@ public class VisorCotasActivity extends AppCompatActivity {
         btnMedir = findViewById(R.id. btnMedir);
         btnSave  = findViewById(R.id. btnSave);
         btnBack  = findViewById(R.id. btnBack);
-        btnMedicionPrecisa  = findViewById(R.id. btnMedicionPrecisa);
+        btnAgrePunto  = findViewById(R.id.btnAgrePunto);
+        txtInstruccion= findViewById(R.id.txtInstruccion);
         LinearLayout containerButtons = findViewById(R.id.containerButtons);
         CotasOverlay cotasOverlay = findViewById(R.id.cotasOverlay);
+        RadioGroup radioGroupModo = findViewById(R.id.radioGroupModo);
+        RadioButton radioLinea = findViewById(R.id.radioLinea);
+        RadioButton radioEtiqueta = findViewById(R.id.radioEtiqueta);
+
+
+
+        piezaAdapter = new PiezaAdapter(listaPiezas, this, new PiezaAdapter.OnItemClickListener() {
+            @Override
+            public void onEditClick(Pieza pieza, int position) {
+                // editar pieza (si quieres)
+            }
+
+            @Override
+            public void onDeleteClick(Pieza pieza, int position) {
+                // eliminar pieza (si quieres)
+            }
+        });
+
+
+
+
+        radioGroupModo.setVisibility(View.GONE);
+
 
         Intent intent = getIntent();
         String uriString = intent.getStringExtra("imagenUri");
         if (uriString != null) {
             imagenUri = Uri.parse(uriString);
-            Log.e(TAG, "Imagen URI recibida: " + imagenUri.toString());  // Log cuando se recibe el URI de la imagen
+            //Log.e(TAG, "Imagen URI recibida: " + imagenUri.toString());  // Log cuando se recibe el URI de la imagen
             imgVisor.setImageURI(imagenUri);
-            Log.e(TAG, "Imagen recibida y mostrada: " + imagenUri.toString());
+            //Log.e(TAG, "Imagen recibida y mostrada: " + imagenUri.toString());
         } else {
             Log.w(TAG, "No se recibió imagenUri en el intent");
         }
+
+
+
+        radioGroupModo.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radioLinea) {
+                modoSeleccionado = "linea";
+                txtInstruccion.setText("Modo: Medidas (cotas)");
+            } else if (checkedId == R.id.radioEtiqueta) {
+                modoSeleccionado = "etiqueta";
+                txtInstruccion.setText("Modo: Etiquetas");
+            }
+        });
+
+
+
 
 
 
@@ -103,39 +152,51 @@ public class VisorCotasActivity extends AppCompatActivity {
             }
         });
 
-        //medir
+
         btnMedir.setOnClickListener(v -> {
-            cotasOverlay.setVisibility(View.VISIBLE);
-            cotasOverlay.setDrawingEnabled(true);
+            Log.e(TAG, "btn medir");
 
-            // DETECTAR MODO OSCURO/CLARO (FALTA ESTO)
-            boolean isDarkMode = (getResources().getConfiguration().uiMode &
-                    android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-                    android.content.res.Configuration.UI_MODE_NIGHT_YES;
+//            radioGroupModo.setVisibility(View.VISIBLE);
+//            cotasOverlay.setVisibility(View.VISIBLE);
+//            cotasOverlay.setDrawingEnabled(true);
+//
+//            // Detectar modo seleccionado (0 = Medidas, 1 = Etiqueta)
+//            if (radioGroupModo.getCheckedRadioButtonId() == R.id.radioLinea) {
+//                cotasOverlay.setModo(0); // modo medidas
+//                txtInstruccion.setText("Toque la pantalla para agregar el primer punto");
+//            } else {
+//                cotasOverlay.setModo(1); // modo etiquetas
+//                txtInstruccion.setText("Toque la pantalla para agregar una etiqueta");
+//            }
+//
+//            txtInstruccion.setVisibility(View.VISIBLE);
+//            btnRecortar.setVisibility(View.INVISIBLE);
+//            btnMedir.setVisibility(View.INVISIBLE);
+//
+//            cotasOverlay.resetPuntos();
 
-            // USAR COLOR SEGÚN MODO
-            int colorFondo = isDarkMode ? Color.WHITE : Color.BLACK;
+//adaptando agregando el cotasoverlay y el textview
+            FormularioPiezaDialog.mostrar(
+                    this,
+                    getListaPiezas(),
+                    getPiezaAdapter(),
+                    (tipo, ancho, alto, largo) -> calcularArea(tipo, ancho, alto, largo),cotasOverlay,
+                    txtInstruccion
+            );
 
-            imgVisor.setBackgroundColor(colorFondo);
-            findViewById(R.id.main).setBackgroundColor(colorFondo);
 
 
-
-            btnMedicionPrecisa.setVisibility(View.VISIBLE);
-            btnRetroceder.setVisibility(View.GONE);
-            btnRecortar.setVisibility(View.GONE);
-            btnMedir.setVisibility(View.GONE);
-            btnGuardar.setVisibility(View.GONE);
-            btnSave.setVisibility(View.VISIBLE);
-            btnBack.setVisibility(View.VISIBLE);
-
-            Log.e(TAG, "btn agregar cotas");
-            ToastHelper.showShortToast(this, "Modo cotas activado", 1000);
         });
+
+
 
         btnRetroceder.setOnClickListener(v -> {
             Log.d(TAG, "Botón Retroceder presionado");
-            // Lógica para retroceder o salir
+
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("imagenUri", imagenUri.toString());
+            setResult(RESULT_OK, resultIntent);
+
             finish();
         });
 
@@ -143,13 +204,11 @@ public class VisorCotasActivity extends AppCompatActivity {
             if (imagenUri != null) {
                 Log.e(TAG, "btn guardar");
                 ToastHelper.showShortToast(this, "Modo cotas Desactivado", 1000);
-                // Pasar la imagenUri de vuelta a AgregarEstructuraActivity
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("imagenUri", imagenUri.toString()); // Enviar URI
-                Log.d(TAG, "Pasando imagenUri de vuelta: " + imagenUri.toString());
-                setResult(RESULT_OK, resultIntent); // Establecer el resultado
 
-                finish(); // Finalizar esta actividad
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("imagenUri", imagenUri.toString());
+                setResult(RESULT_OK, resultIntent);
+                finish();
             } else {
                 Toast.makeText(this, "No hay imagen para guardar", Toast.LENGTH_SHORT).show();
             }
@@ -159,34 +218,15 @@ public class VisorCotasActivity extends AppCompatActivity {
             Log.d(TAG, "BOTON SAVE - Guardando cotas");
             ToastHelper.showShortToast(this, "Modo cotas Desactivado", 1000);
 
-            // DESACTIVAR COTAS PERO SEGUIR EN LA MISMA PANTALLA
             cotasOverlay.setDrawingEnabled(false);
             cotasOverlay.setVisibility(View.GONE);
 
-            // RESTABLECER FONDOS (NUEVO)
-//            containerButtons.setBackgroundColor(Color.TRANSPARENT);
-//            findViewById(R.id.conStDainerButtons).setBackgroundColor(Color.TRANSPARENT);
-//            imgVisor.setBackgroundColor(Color.TRANSPARENT);
-
-//            // DETECTAR MODO OSCURO/CLARO (FALTA ESTO)
-//            boolean isDarkMode = (getResources().getConfiguration().uiMode &
-//                    android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-//                    android.content.res.Configuration.UI_MODE_NIGHT_YES;
-//
-//            // USAR COLOR SEGÚN MODO
-//            int colorFondo = isDarkMode ? Color.WHITE : Color.BLACK;
-//            imgVisor.setBackgroundColor(colorFondo);
-//            findViewById(R.id.main).setBackgroundColor(colorFondo);
-
-            configurarFondoModoMedicion();
-
-            // MOSTRAR BOTONES NORMALES
             btnRetroceder.setVisibility(View.VISIBLE);
             btnRecortar.setVisibility(View.VISIBLE);
             btnMedir.setVisibility(View.VISIBLE);
             btnGuardar.setVisibility(View.VISIBLE);
+            btnAgrePunto.setVisibility(View.GONE);
 
-            // OCULTAR BOTONES DE COTAS
             btnSave.setVisibility(View.GONE);
             btnBack.setVisibility(View.GONE);
 
@@ -194,89 +234,76 @@ public class VisorCotasActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(v -> {
-            // SOLO DESACTIVAR COTAS SIN GUARDAR
             cotasOverlay.setDrawingEnabled(false);
             cotasOverlay.setVisibility(View.GONE);
 
-//            // RESTABLECER FONDOS (NUEVO)
-//            findViewById(R.id.main).setBackgroundColor(getResources().getColor(android.R.color.background_light));
-//            containerButtons.setBackgroundColor(Color.TRANSPARENT);
-//            findViewById(R.id.conStDainerButtons).setBackgroundColor(Color.TRANSPARENT);
-//            imgVisor.setBackgroundColor(Color.TRANSPARENT);
-
-//            // DETECTAR MODO OSCURO/CLARO (FALTA ESTO)
-//            boolean isDarkMode = (getResources().getConfiguration().uiMode &
-//                    android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
-//                    android.content.res.Configuration.UI_MODE_NIGHT_YES;
-//
-//            // USAR COLOR SEGÚN MODO
-//            int colorFondo = isDarkMode ? Color.WHITE : Color.BLACK;
-//
-//            imgVisor.setBackgroundColor(colorFondo);
-//            findViewById(R.id.main).setBackgroundColor(colorFondo);
-
-            configurarFondoModoMedicion();
-
-
-            // MOSTRAR BOTONES NORMALES
             btnRetroceder.setVisibility(View.VISIBLE);
             btnRecortar.setVisibility(View.VISIBLE);
             btnMedir.setVisibility(View.VISIBLE);
             btnGuardar.setVisibility(View.VISIBLE);
 
-            // OCULTAR BOTONES DE COTAS
             btnSave.setVisibility(View.GONE);
             btnBack.setVisibility(View.GONE);
 
             Log.d(TAG, "Modo cotas cancelado");
         });
 
-        btnMedicionPrecisa.setOnClickListener(v -> {
-            modoMedicionPrecisa = !modoMedicionPrecisa;
+        btnAgrePunto.setOnClickListener(v -> {
+            Log.e(TAG,"btn Agegar punto");
 
-            if (modoMedicionPrecisa) {
-                ToastHelper.showShortToast(this, "Modo medición precisa activado", 1000);
-                cotasOverlay.setModoMedicionPrecisa(true);
-                // Desactivar otras funciones
-                cotasOverlay.setDrawingEnabled(false);
-            } else {
-                cotasOverlay.setModoMedicionPrecisa(false);
-            }
+
+            cotasOverlay.setVisibility(View.VISIBLE);
+            cotasOverlay.setDrawingEnabled(true);
+            txtInstruccion.setVisibility(View.VISIBLE);
+
+            cotasOverlay.resetPuntos();
+            txtInstruccion.setText("Toque la pantalla para agregar el primer punto");
+
+
+
+
+
+
+
+//            modoMedicionPrecisa = !modoMedicionPrecisa;
+//
+//            if (modoMedicionPrecisa) {
+//                ToastHelper.showShortToast(this, "Modo medición precisa activado", 1000);
+//                cotasOverlay.setModoMedicionPrecisa(true);
+//                cotasOverlay.setDrawingEnabled(false);
+//            } else {
+//                cotasOverlay.setModoMedicionPrecisa(false);
+//            }
         });
 
     }
 
-    private void guardarImagen(Uri imageUri) {
-        try {
-
-            Log.e(TAG, "Iniciando guardado de imagen: " + imageUri.toString());  // Log que indica el inicio del guardado
-            // Crear un archivo en almacenamiento interno (puedes modificarlo para almacenamiento externo)
-            File outputFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "imagen_guardada.jpg");
-
-            // Obtener el InputStream de la imagen original
-            InputStream inputStream = getContentResolver().openInputStream(imageUri);
-            FileOutputStream outputStream = new FileOutputStream(outputFile);
-
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, length);
-            }
-
-            inputStream.close();
-            outputStream.close();
-
-            Log.d(TAG, "Imagen guardada correctamente en el almacenamiento");
-            // Actualizar imagenUri con la URI del archivo guardado
-            imagenUri = Uri.fromFile(outputFile);  // Asignamos la URI del archivo guardado
-
-            // Muestra mensaje de éxito
-            Toast.makeText(this, "Imagen guardada correctamente", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            Log.e(TAG, "Error guardando la imagen", e);
-            Toast.makeText(this, "No se pudo guardar la imagen", Toast.LENGTH_SHORT).show();
-        }
-    }
+//    private void guardarImagen(Uri imageUri) {
+//        try {
+//            Log.e(TAG, "Iniciando guardado de imagen: " + imageUri.toString());
+//            File outputFile = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "imagen_guardada.jpg");
+//
+//            InputStream inputStream = getContentResolver().openInputStream(imageUri);
+//            FileOutputStream outputStream = new FileOutputStream(outputFile);
+//
+//            byte[] buffer = new byte[1024];
+//            int length;
+//            while ((length = inputStream.read(buffer)) != -1) {
+//                outputStream.write(buffer, 0, length);
+//            }
+//
+//            inputStream.close();
+//            outputStream.close();
+//
+//            Log.d(TAG, "Imagen guardada correctamente en el almacenamiento");
+//            imagenUri = Uri.fromFile(outputFile);
+//
+//            Toast.makeText(this, "Imagen guardada correctamente", Toast.LENGTH_SHORT).show();
+//        } catch (IOException e) {
+//            Log.e(TAG, "Error guardando la imagen", e);
+//            Toast.makeText(this, "No se pudo guardar la imagen", Toast.LENGTH_SHORT).show();
+//        }
+//    }
 
     private void recortarImagen() {
         if (imagenUri == null) {
@@ -286,21 +313,18 @@ public class VisorCotasActivity extends AppCompatActivity {
         }
 
         try {
-            // Crear un archivo temporal para guardar el resultado del recorte
             Uri destinoUri = Uri.fromFile(new File(getCacheDir(), "recortada_" + System.currentTimeMillis() + ".jpg"));
 
-            // Configurar UCrop básico
             UCrop uCrop = UCrop.of(imagenUri, destinoUri)
                     .withMaxResultSize(2000, 2000);
 
-            // Configurar OPCIONES para modo libre - ¡ESTA ES LA CLAVE!
             UCrop.Options options = new UCrop.Options();
-            options.setFreeStyleCropEnabled(true);  // ← ACTIVA MODO LIBRE
-            options.withAspectRatio(0, 0);          // ← RELACIÓN LIBRE
+            options.setFreeStyleCropEnabled(true);
+            options.withAspectRatio(0, 0);
 
             uCrop.withOptions(options);
 
-            Log.d(TAG, "Lanzando uCrop para imagenUri: " + imagenUri.toString());
+            //Log.d(TAG, "Lanzando uCrop para imagenUri: " + imagenUri.toString());
             cropLauncher.launch(uCrop.getIntent(this));
         } catch (Exception e) {
             Log.e(TAG, "Error recortando imagen con uCrop", e);
@@ -308,31 +332,14 @@ public class VisorCotasActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void finish() {
-        Log.wtf(TAG, "VisorCotasActivity finalizando");
+        //Log.wtf(TAG, "VisorCotasActivity finalizando");
         super.finish();
     }
 
-    private void configurarFondoModoMedicion() {
-        // DETECTAR MODO OSCURO/CLARO
-        boolean isDarkMode = (getResources().getConfiguration().uiMode &
-                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-
-        // USAR MISMO COLOR DEL MODO ACTUAL (NO CONTRARIO)
-        int colorFondo = isDarkMode ? Color.BLACK : Color.WHITE;
-
-        // LOGS DETALLADOS
-        Log.d(TAG, "🔍 Modo detectado: " + (isDarkMode ? "OSCURO" : "CLARO"));
-        Log.d(TAG, "🎨 Color de fondo aplicado: " + (colorFondo == Color.WHITE ? "BLANCO" : "NEGRO"));
-        Log.d(TAG, "📱 Tema: " + (isDarkMode ? "NEGRO" : "BLANCO") + " → Fondo medición: " + (colorFondo == Color.WHITE ? "BLANCO" : "NEGRO"));
-
-        // APLICAR A ELEMENTOS
-        imgVisor.setBackgroundColor(colorFondo);
-        findViewById(R.id.main).setBackgroundColor(colorFondo);
-
-        Log.d(TAG, "✅ Fondo configurado correctamente para modo medición");
+    public void setInstruccion(String texto) {
+        txtInstruccion.setText(texto);
     }
 
 
@@ -340,5 +347,59 @@ public class VisorCotasActivity extends AppCompatActivity {
 
 
 
+
+
+
+
+
+
+    public List<Pieza> getListaPiezas() {
+        return listaPiezas;
+    }
+
+    public PiezaAdapter getPiezaAdapter() {
+        return piezaAdapter;
+    }
+
+
+    public float calcularArea(String tipoMaterial, float ancho, float alto, float largo) {
+        Log.d(TAG, "calcularArea() llamado con -> material=" + tipoMaterial + ", ancho=" + ancho + ", alto=" + alto + ", largo=" + largo);
+
+        float anchoM = ancho * 0.0254f;
+        float altoM = alto * 0.0254f;
+        float largoM = largo;
+
+        switch (tipoMaterial) {
+            case "Cuadrado":
+            case "Tubo Cuadrado":
+                Log.d(TAG, "Usando fórmula Cuadrado/Tubo Cuadrado");
+                return 4 * anchoM * largoM;
+
+            case "Circular":
+            case "Tubo Circular":
+                Log.d(TAG, "Usando fórmula Circular/Tubo Circular");
+                return (float) (Math.PI * anchoM * largoM);
+
+            case "Plancha":
+                Log.d(TAG, "Usando fórmula Plancha");
+                return anchoM * altoM * 2;
+
+            case "Ángulo":
+                Log.d(TAG, "Usando fórmula Ángulo");
+                return (anchoM + altoM + Math.max(anchoM, altoM)) * largoM;
+
+            case "Barra Liza Cuadrada":
+                Log.d(TAG, "Usando fórmula Barra Liza Cuadrada");
+                return 4 * anchoM * largoM;
+
+            case "Barra Liza Redonda":
+                Log.d(TAG, "Usando fórmula Barra Liza Redonda");
+                return (float) (Math.PI * anchoM * largoM);
+
+            default:
+                Log.w(TAG, "Material no reconocido: " + tipoMaterial);
+                return 0;
+        }
+    }
 
 }

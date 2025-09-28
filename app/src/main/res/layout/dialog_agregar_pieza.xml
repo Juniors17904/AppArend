@@ -3,32 +3,77 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"> <!-- Guideline vertical al 50% -->
+    android:padding="16dp">
+
+    <!-- Guideline vertical al 43% -->
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineVertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.43" /> <!-- Título -->
+        app:layout_constraintGuide_percent="0.43" />
+
+    <!-- Título -->
     <TextView
         android:id="@+id/txtTitulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Agregar Pieza"
-        android:textSize="20sp"
+        android:textSize="22sp"
         android:textStyle="bold"
+        android:textColor="#111827"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" /> <!-- LABEL Y SPINNER PERFILES (MITAD IZQUIERDA) -->
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Acciones principales: Medir / Etiquetar -->
+    <LinearLayout
+        android:id="@+id/containerAcciones"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <Button
+            android:id="@+id/btnDIMedir"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#2563EB"
+            android:fontFamily="sans-serif-medium"
+            android:text="Medir"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/btnDIEtiquetar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:backgroundTint="#7C3AED"
+            android:fontFamily="sans-serif-medium"
+            android:text="Etiquetar"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <!-- LABEL Y SPINNER PERFILES (MITAD IZQUIERDA) -->
     <TextView
         android:id="@+id/lblPerfiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:text="Perfiles:"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
+        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
 
     <Spinner
         android:id="@+id/spinnerMaterial"
@@ -37,28 +82,31 @@
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toStartOf="@id/guidelineVertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lblPerfiles" /> <!-- LABEL Y SPINNER DIMENSIONES (MITAD DERECHA) --> <!-- CAMPOS LADO 1 Y LADO 2 (MITAD DERECHA) -->
+        app:layout_constraintTop_toBottomOf="@id/lblPerfiles" />
+
+    <!-- LABEL Y SPINNER DIMENSIONES (MITAD DERECHA) -->
     <TextView
         android:id="@+id/lblDimensiones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="20dp"
         android:text="Dimension:"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/spinnerUnidades"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
+        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
 
     <Spinner
         android:id="@+id/spinnerUnidades"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="18dp"
         android:entries="@array/unidades"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/lblDimensiones"
-        app:layout_constraintTop_toBottomOf="@id/txtTitulo" />
+        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
 
+    <!-- CAMPOS LADO 1 Y LADO 2 (MITAD DERECHA) -->
     <EditText
         android:id="@+id/etAncho"
         android:layout_width="wrap_content"
@@ -91,7 +139,9 @@
         android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/textX"
-        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" /> <!-- Largo -->
+        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+
+    <!-- Largo -->
     <TextView
         android:id="@+id/lblLargo"
         android:layout_width="0dp"
@@ -102,7 +152,9 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAncho" /> <!-- Cantidad --> <EditText
+        app:layout_constraintTop_toBottomOf="@id/etAncho" />
+
+    <EditText
         android:id="@+id/etLargo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -115,6 +167,7 @@
         app:layout_constraintTop_toTopOf="@id/lblLargo"
         app:layout_constraintVertical_bias="0.476" />
 
+    <!-- Cantidad -->
     <TextView
         android:id="@+id/lblCantidad"
         android:layout_width="0dp"
@@ -136,7 +189,10 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@id/lblCantidad"
         app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@id/lblCantidad" /> <!-- Descripción --> <TextView
+        app:layout_constraintTop_toTopOf="@id/lblCantidad" />
+
+    <!-- Descripción -->
+    <TextView
         android:id="@+id/lblDescripcion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -154,13 +210,18 @@
         android:padding="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lblDescripcion" /> <!-- Botón Calcular y CheckBox -->
+        app:layout_constraintTop_toBottomOf="@id/lblDescripcion" />
+
+    <!-- Botón Calcular y CheckBox -->
     <Button
         android:id="@+id/btnCalcular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Calcular Total m²"
+        android:textAllCaps="false"
+        android:backgroundTint="#059669"
+        android:textColor="@android:color/white"
         app:layout_constraintEnd_toStartOf="@id/cbRecordar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etDescripcion" />
@@ -173,7 +234,10 @@
         app:layout_constraintBottom_toBottomOf="@id/btnCalcular"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btnCalcular"
-        app:layout_constraintTop_toTopOf="@id/btnCalcular" /> <!-- Total --> <TextView
+        app:layout_constraintTop_toTopOf="@id/btnCalcular" />
+
+    <!-- Total -->
+    <TextView
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -190,7 +254,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
         android:text="0.00 m²"
-        android:textColor="#1d4ed8"
+        android:textColor="#1D4ED8"
         android:textSize="22sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/tvTotal"
@@ -217,4 +281,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/etCantidad"
         app:layout_constraintTop_toTopOf="@+id/etCantidad" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -359,7 +359,7 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
         Log.d(TAG, "Dialog mostrado (mostrarFormularioAgregarPieza) - FIN");
     }
 
-    private float calcularArea(String tipoMaterial, float ancho, float alto, float largo) {
+    public float calcularArea(String tipoMaterial, float ancho, float alto, float largo) {
         Log.d(TAG, "calcularArea() llamado con -> material=" + tipoMaterial + ", ancho=" + ancho + ", alto=" + alto + ", largo=" + largo);
 
         float anchoM = ancho * 0.0254f;
@@ -462,7 +462,7 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
                 if (photoUri != null) {
                     imgPreview.setVisibility(View.VISIBLE);
                     imgPreview.setImageURI(photoUri);
-                    Log.d(TAG, "borrar visible");
+                  //  Log.d(TAG, "borrar visible");
                     btnAgregarImagen.setVisibility(View.GONE);
                     btnBorrarImagen.setVisibility(View.VISIBLE);
 
@@ -613,8 +613,13 @@ public class AgregarEstructuraActivity extends AppCompatActivity {
 
 
 
+    public List<Pieza> getListaPiezas() {
+        return listaPiezas;
+    }
 
-
+    public PiezaAdapter getPiezaAdapter() {
+        return piezaAdapter;
+    }
 
 
 
