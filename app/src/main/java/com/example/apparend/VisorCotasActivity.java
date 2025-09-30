@@ -154,7 +154,7 @@ public class VisorCotasActivity extends AppCompatActivity {
 
 
         btnMedir.setOnClickListener(v -> {
-            Log.e(TAG, "btn medir");
+
 
 //            radioGroupModo.setVisibility(View.VISIBLE);
 //            cotasOverlay.setVisibility(View.VISIBLE);
@@ -176,6 +176,9 @@ public class VisorCotasActivity extends AppCompatActivity {
 //            cotasOverlay.resetPuntos();
 
 //adaptando agregando el cotasoverlay y el textview
+
+            Log.e(TAG, "btn medir");
+
             FormularioPiezaDialog.mostrar(
                     this,
                     getListaPiezas(),

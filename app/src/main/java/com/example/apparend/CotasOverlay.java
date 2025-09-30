@@ -31,6 +31,7 @@ public class CotasOverlay extends View {
     private float zoomFactor = 2.0f;
     private int modo = 0;
     private Runnable onMedicionTerminada;
+    private List<String> textosCotas = new ArrayList<>();
 
 
     // VARIABLES NUEVAS PARA MODO MEDICIÓN PRECISA
@@ -44,6 +45,22 @@ public class CotasOverlay extends View {
         paint.setStrokeWidth(5f);
         paint.setTextSize(40f);
     }
+
+    public void agregarCota(PointF start, PointF end, String texto) {
+        startPoints.add(start);
+        endPoints.add(end);
+        textosCotas.add(texto);
+        invalidate();
+    }
+
+
+    public void agregarTextoCota(String texto) {
+        if (!endPoints.isEmpty()) {
+            textosCotas.set(textosCotas.size() - 1, texto);
+            invalidate();
+        }
+    }
+
 
     public void setDrawingEnabled(boolean enabled) {
         drawingEnabled = enabled;
@@ -120,10 +137,8 @@ public class CotasOverlay extends View {
 
                             ((VisorCotasActivity) getContext()).runOnUiThread(() -> {
                                 VisorCotasActivity activity = (VisorCotasActivity) getContext();
-                                activity.setInstruccion("✔");
+                                activity.setInstruccion("Finalizado");
                                 Log.d(TAG, "Segundo punto agregado: " + segundoPunto);
-
-
 
 //                                FormularioPiezaDialog.mostrar(
 //                                        (VisorCotasActivity) getContext(),
@@ -133,15 +148,17 @@ public class CotasOverlay extends View {
 //                                );
 
 
-                                // 🔵 MOSTRAR RadioButton al terminar
+                                // 🔵 MOSTRAR RadioButton al terminarfia
                                 activity.findViewById(R.id.radioGroupModo)
-                                        .setVisibility(View.VISIBLE);
+                                        .setVisibility(View.GONE);
                             });
 
                             resetPuntos();
+
                             // Avisar al formulario que se terminó la medición
                             if (onMedicionTerminada != null) {
-                                onMedicionTerminada.run();
+                                postDelayed(onMedicionTerminada, 500);
+
                             }
 
                         }
@@ -207,7 +224,7 @@ public class CotasOverlay extends View {
                 };
 
                 // 🔴 Solo mostrar primer punto en la lupa
-                if (primerPunto != null) {
+                if (primerPunto != null  && segundoPunto == null && puntoActualTemporal == null) {
                     PointF p1 = toLupa.apply(primerPunto);
                     canvas.drawCircle(p1.x, p1.y, 8, paint);
                 }
@@ -235,7 +252,10 @@ public class CotasOverlay extends View {
 
             float midX = (s.x + e.x) / 2;
             float midY = (s.y + e.y) / 2;
-            canvas.drawText("25 cm", midX, midY, paint);
+            //canvas.drawText("25 cm", midX, midY, paint);
+            // ⬇️ Aquí usar el texto real guardado
+            String texto = (i < textosCotas.size()) ? textosCotas.get(i) : "";
+            canvas.drawText(texto, midX, midY, paint);
         }
 
         // 🟡 Primer punto marcado
@@ -292,6 +312,9 @@ public class CotasOverlay extends View {
 
 
 
+
+
+
     public void resetPuntos() {
         primerPunto = null;
         segundoPunto = null;
@@ -307,6 +330,7 @@ public class CotasOverlay extends View {
 
 
 }
+
 
 
 

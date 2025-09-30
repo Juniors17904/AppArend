@@ -1,206 +1,198 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="wrap_content"
+    android:padding="20dp">
 
-    <!-- Guideline vertical al 43% -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guidelineVertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.43" />
 
-    <!-- Título -->
     <TextView
         android:id="@+id/txtTitulo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Agregar Pieza"
+        android:text="Detallar Medidas"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#111827"
         android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Acciones principales: Medir / Etiquetar -->
-    <LinearLayout
-        android:id="@+id/containerAcciones"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/txtTitulo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <Button
-            android:id="@+id/btnDIMedir"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#2563EB"
-            android:fontFamily="sans-serif-medium"
-            android:text="Medir"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/btnDIEtiquetar"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:backgroundTint="#7C3AED"
-            android:fontFamily="sans-serif-medium"
-            android:text="Etiquetar"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
-
-    <!-- LABEL Y SPINNER PERFILES (MITAD IZQUIERDA) -->
+    <!-- Perfiles -->
     <TextView
         android:id="@+id/lblPerfiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="Perfiles:"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
+        android:layout_marginTop="16dp"/>
 
     <Spinner
         android:id="@+id/spinnerMaterial"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toStartOf="@id/guidelineVertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lblPerfiles" />
+        android:background="@drawable/spinner_borde"
+        app:layout_constraintTop_toTopOf="@id/lblPerfiles"
+        app:layout_constraintBottom_toBottomOf="@id/lblPerfiles"
+        app:layout_constraintStart_toEndOf="@id/lblPerfiles"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"/>
 
-    <!-- LABEL Y SPINNER DIMENSIONES (MITAD DERECHA) -->
+    <!-- Dimensiones -->
     <TextView
         android:id="@+id/lblDimensiones"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Dimension:"
+        android:text="Dimensión:"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/spinnerUnidades"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
+        app:layout_constraintTop_toBottomOf="@id/spinnerMaterial"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
 
     <Spinner
         android:id="@+id/spinnerUnidades"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
+        android:background="@drawable/spinner_borde"
         android:entries="@array/unidades"
+        app:layout_constraintTop_toTopOf="@id/lblDimensiones"
+        app:layout_constraintBottom_toBottomOf="@id/lblDimensiones"
+        app:layout_constraintStart_toEndOf="@id/lblDimensiones"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/lblDimensiones"
-        app:layout_constraintTop_toBottomOf="@id/containerAcciones" />
+        android:layout_marginStart="8dp"/>
 
-    <!-- CAMPOS LADO 1 Y LADO 2 (MITAD DERECHA) -->
-    <EditText
-        android:id="@+id/etAncho"
+    <!-- Lados -->
+    <TextView
+        android:id="@+id/lblLado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
+        android:text="Lados:"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="16dp"/>
+
+    <EditText
+        android:id="@+id/etAncho"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:hint="Lado 1"
+        android:gravity="center"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toStartOf="@+id/textX"
-        app:layout_constraintStart_toStartOf="@id/guidelineVertical"
-        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+        android:drawableEnd="@drawable/ic_medir"
+        app:layout_constraintTop_toBottomOf="@id/lblLado"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/textX"
+        android:layout_marginTop="8dp"/>
 
     <TextView
         android:id="@+id/textX"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="x"
-        app:layout_constraintEnd_toStartOf="@+id/etAlto"
+        app:layout_constraintTop_toTopOf="@id/etAncho"
+        app:layout_constraintBottom_toBottomOf="@id/etAncho"
         app:layout_constraintStart_toEndOf="@id/etAncho"
-        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+        app:layout_constraintEnd_toStartOf="@id/etAlto"
+        android:layout_marginHorizontal="8dp"/>
 
     <EditText
         android:id="@+id/etAlto"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
         android:hint="Lado 2"
+        android:gravity="center"
         android:inputType="numberDecimal"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:drawableEnd="@drawable/ic_medir"
+        app:layout_constraintTop_toTopOf="@id/etAncho"
+        app:layout_constraintBottom_toBottomOf="@id/etAncho"
         app:layout_constraintStart_toEndOf="@id/textX"
-        app:layout_constraintTop_toBottomOf="@id/spinnerUnidades" />
+        app:layout_constraintEnd_toEndOf="parent"/>
 
     <!-- Largo -->
     <TextView
         android:id="@+id/lblLargo"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Largo:"
-        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/etAlto"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etAncho" />
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/etLargo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:hint="Largo"
         android:gravity="center"
-        android:hint="   Ingrese largo    "
         android:inputType="numberDecimal"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@id/lblLargo"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
+        android:drawableEnd="@drawable/ic_medir"
         app:layout_constraintTop_toTopOf="@id/lblLargo"
-        app:layout_constraintVertical_bias="0.476" />
+        app:layout_constraintBottom_toBottomOf="@id/lblLargo"
+        app:layout_constraintStart_toEndOf="@id/lblLargo"
+        app:layout_constraintEnd_toStartOf="@id/textViewM"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/textViewM"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(m)"
+        app:layout_constraintTop_toTopOf="@id/etLargo"
+        app:layout_constraintBottom_toBottomOf="@id/etLargo"
+        app:layout_constraintStart_toEndOf="@id/etLargo"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"/>
 
     <!-- Cantidad -->
     <TextView
         android:id="@+id/lblCantidad"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cantidad:"
-        android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/guidelineVertical"
+        app:layout_constraintTop_toBottomOf="@id/etLargo"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etLargo" />
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/etCantidad"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:hint="Ingrese cantidad"
+        android:gravity="center"
         android:inputType="number"
-        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@id/lblCantidad"
         app:layout_constraintBottom_toBottomOf="@id/lblCantidad"
-        app:layout_constraintStart_toStartOf="@+id/guidelineVertical"
-        app:layout_constraintTop_toTopOf="@id/lblCantidad" />
+        app:layout_constraintStart_toEndOf="@id/lblCantidad"
+        app:layout_constraintEnd_toStartOf="@id/textView2"
+        android:layout_marginStart="8dp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(unid)"
+        app:layout_constraintTop_toTopOf="@id/etCantidad"
+        app:layout_constraintBottom_toBottomOf="@id/etCantidad"
+        app:layout_constraintStart_toEndOf="@id/etCantidad"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"/>
 
     <!-- Descripción -->
     <TextView
         android:id="@+id/lblDescripcion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Descripción:"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/etCantidad"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etCantidad" />
+        android:layout_marginTop="16dp"/>
 
     <EditText
         android:id="@+id/etDescripcion"
@@ -208,78 +200,58 @@
         android:layout_height="wrap_content"
         android:hint="Descripción (opcional)"
         android:padding="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblDescripcion"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lblDescripcion" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"/>
 
     <!-- Botón Calcular y CheckBox -->
     <Button
         android:id="@+id/btnCalcular"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Calcular Total m²"
         android:textAllCaps="false"
         android:backgroundTint="#059669"
         android:textColor="@android:color/white"
-        app:layout_constraintEnd_toStartOf="@id/cbRecordar"
+        app:layout_constraintTop_toBottomOf="@id/etDescripcion"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etDescripcion" />
+        app:layout_constraintEnd_toStartOf="@id/cbRecordar"
+        android:layout_marginTop="24dp"/>
 
     <CheckBox
         android:id="@+id/cbRecordar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Recordar"
+        app:layout_constraintTop_toTopOf="@id/btnCalcular"
         app:layout_constraintBottom_toBottomOf="@id/btnCalcular"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/btnCalcular"
-        app:layout_constraintTop_toTopOf="@id/btnCalcular" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="8dp"/>
 
     <!-- Total -->
     <TextView
         android:id="@+id/tvTotal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
         android:text="Total:"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/btnCalcular"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnCalcular" />
+        android:layout_marginTop="24dp"/>
 
     <TextView
         android:id="@+id/tvTotalM2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
         android:text="0.00 m²"
         android:textColor="#1D4ED8"
-        android:textSize="22sp"
+        android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@id/tvTotal"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tvTotal"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/textViewM"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(m)"
-        app:layout_constraintBottom_toBottomOf="@+id/etLargo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etLargo"
-        app:layout_constraintTop_toTopOf="@+id/etLargo" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(unid)"
-        app:layout_constraintBottom_toBottomOf="@+id/etCantidad"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/etCantidad"
-        app:layout_constraintTop_toTopOf="@+id/etCantidad" />
+        app:layout_constraintBottom_toBottomOf="@id/tvTotal"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
