@@ -1,4 +1,4 @@
-package com.example.apparend;
+package com.example.apparend.utils;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -13,6 +13,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.apparend.R;
+import com.example.apparend.ui.VisorCotasActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,9 +111,6 @@ public class CotasOverlay extends View {
                         ((VisorCotasActivity) getContext()).runOnUiThread(() -> {
                             ((VisorCotasActivity) getContext()).setInstruccion("Suelte para agregar punto");
 
-                            // 🔴 OCULTAR RadioButton mientras se marca
-                            ((VisorCotasActivity) getContext()).findViewById(R.id.radioGroupModo)
-                                    .setVisibility(View.GONE);
                         });
 
                         invalidate();
@@ -124,8 +124,8 @@ public class CotasOverlay extends View {
                             primerPunto = new PointF(event.getX(), event.getY());
                             ((VisorCotasActivity) getContext()).runOnUiThread(() -> {
                                 ((VisorCotasActivity) getContext()).setInstruccion("Toque para agregar el segundo punto");
-                                Log.d(TAG, "Primer punto agregado: " + primerPunto);
-
+                                Log.d(TAG, "Primer punto agregado: ");
+                                    // + primerPunto
 
 
                             });
@@ -138,19 +138,8 @@ public class CotasOverlay extends View {
                             ((VisorCotasActivity) getContext()).runOnUiThread(() -> {
                                 VisorCotasActivity activity = (VisorCotasActivity) getContext();
                                 activity.setInstruccion("Finalizado");
-                                Log.d(TAG, "Segundo punto agregado: " + segundoPunto);
+                                Log.d(TAG, "Segundo punto agregado: ");
 
-//                                FormularioPiezaDialog.mostrar(
-//                                        (VisorCotasActivity) getContext(),
-//                                        ((VisorCotasActivity) getContext()).getListaPiezas(),
-//                                        ((VisorCotasActivity) getContext()).getPiezaAdapter(),
-//                                        (tipo, ancho, alto, largo) -> ((VisorCotasActivity) getContext()).calcularArea(tipo, ancho, alto, largo)
-//                                );
-
-
-                                // 🔵 MOSTRAR RadioButton al terminarfia
-                                activity.findViewById(R.id.radioGroupModo)
-                                        .setVisibility(View.GONE);
                             });
 
                             resetPuntos();

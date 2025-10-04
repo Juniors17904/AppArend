@@ -47,7 +47,7 @@
         android:layout_marginBottom="4dp"/>
 
     <EditText
-        android:id="@+id/etDescripcion"
+        android:id="@+id/etDescripcionPieza"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Descripción del trabajo"
@@ -95,19 +95,20 @@
         android:text="Lista"
         android:textColor="#333333"
         android:textSize="18sp"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <!-- Cabecera fija -->
-    <include layout="@layout/header_estructuras"
-        android:visibility="gone"/>
+    <include
+        layout="@layout/header_estructuras"
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewPiezas"
+        android:id="@+id/recyclerViewEstructura"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:layout_weight="1"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <!-- Total de estructuras, metros cuadrados y monto -->
     <LinearLayout
@@ -159,18 +160,20 @@
         android:padding="12dp"
         android:text="Generar Reporte"
         android:textColor="#FFFFFF"
-        android:visibility="gone"
+        android:visibility="visible"
         app:cornerRadius="8dp" />
 
     <!-- Botón para finalizar -->
     <Button
-        android:id="@+id/btnFinalizar"
+        android:id="@+id/btnGuardarTrabajo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="#2196F3"
         android:elevation="4dp"
         android:padding="12dp"
-        android:text="Finalizar"
+        android:text="Guardar Trabajo"
+        app:icon="@drawable/baseline_save_24"
+        app:iconGravity="textStart"
         android:textColor="#FFFFFF"
         app:cornerRadius="8dp" />
 </LinearLayout>

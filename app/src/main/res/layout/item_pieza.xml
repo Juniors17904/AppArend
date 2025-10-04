@@ -2,45 +2,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="12dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="@drawable/item_background"
+    android:layout_marginBottom="10dp">
 
+    <!-- Material -->
     <TextView
         android:id="@+id/tvMaterial"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Material"
-        android:textSize="14sp"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        android:text="Material: "
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="6dp"/>
 
+    <!-- Descripción -->
     <TextView
-        android:id="@+id/tvDimensiones"
-        android:layout_width="0dp"
+        android:id="@+id/tvDescripcion"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:text="Dimensiones"
+        android:text="Descripción: "
         android:textSize="14sp"
-        android:maxLines="1"
-        android:ellipsize="end" />
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginBottom="8dp"/>
 
+    <!-- Fila con dimensiones -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/tvCantidad"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cantidad: 0"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvAncho"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Ancho: 0.00"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvAlto"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Alto: 0.00"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <!-- Largo -->
     <TextView
-        android:id="@+id/tvCantidad"
-        android:layout_width="0dp"
+        android:id="@+id/tvLargo"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Cant"
+        android:text="Largo: 0.00"
         android:textSize="14sp"
-        android:gravity="center" />
+        android:layout_marginBottom="6dp"/>
 
+    <!-- Total m² -->
     <TextView
         android:id="@+id/tvTotalM2"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Total m²"
-        android:textSize="14sp"
-        android:gravity="end" />
+        android:text="Total: 0.00 m²"
+        android:textStyle="bold|italic"
+        android:textSize="15sp"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/holo_blue_dark" />
+
 </LinearLayout>

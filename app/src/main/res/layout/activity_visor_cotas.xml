@@ -8,10 +8,7 @@
     android:layout_height="match_parent"
     android:background="#000000">
 
-    <!-- Imagen principal - OCUPA EL CENTRO -->
-    <!-- 🔹 Evita que la imagen suba demasiado cuando txtInstruccion está GONE -->
 
-    <!-- Overlay para dibujar cotas -->
 
     <ImageView
         android:id="@+id/imgVisor"
@@ -28,7 +25,7 @@
         app:layout_constraintVertical_bias="0.0"
         app:layout_goneMarginTop="8dp" />
 
-    <com.example.apparend.CotasOverlay
+    <com.example.apparend.utils.CotasOverlay
         android:id="@+id/cotasOverlay"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -121,92 +118,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp"/>
 
-    <!-- OPCIONES DE MODO: LÍNEA O ETIQUETA -->
-    <RadioGroup
-        android:id="@+id/radioGroupModo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/conStDainerButtons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-        <RadioButton
-            android:id="@+id/radioLinea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Medidas"
-            android:textColor="#FFFFFF"
-            android:visibility="visible" />
-
-        <RadioButton
-            android:id="@+id/radioEtiqueta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:text="Etiqueta"
-            android:textColor="#FFFFFF"
-            android:visibility="visible" />
-
-    </RadioGroup>
-
-    <!-- BOTONES INFERIORES - TEXTO + ICONO -->
-    <LinearLayout
-        android:id="@+id/conStDainerButtons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Volver"
-            android:visibility="gone"
-            android:backgroundTint="#9E9E9E"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/ic_back"
-            app:iconSize="20dp"
-            app:iconGravity="textStart"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAgrePunto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Agregar"
-            android:visibility="gone"
-            android:backgroundTint="#2196F3"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/ic_add"
-            app:iconSize="20dp"
-            app:iconGravity="textStart"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Guardar"
-            android:visibility="gone"
-            android:backgroundTint="#4CAF50"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/baseline_check_24"
-            app:iconSize="20dp"
-            app:iconGravity="textStart"/>
-
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

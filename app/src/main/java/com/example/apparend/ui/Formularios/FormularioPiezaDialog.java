@@ -1,9 +1,7 @@
-package com.example.apparend;
+package com.example.apparend.ui.Formularios;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -11,15 +9,17 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 
+import com.example.apparend.utils.CotasOverlay;
 import com.example.apparend.R;
-import com.example.apparend.Pieza;
+import com.example.apparend.adapters.PiezaAdapter;
+import com.example.apparend.models.Pieza;
 
 import java.util.List;
 
 public class FormularioPiezaDialog {
-    private static final String TAG = "arenado Form Pieza";
+    private static final String TAG = "Form Pieza arenado";
 
-    public static void mostrar(Context context,List<Pieza> listaPiezas,PiezaAdapter piezaAdapter, AreaCalculator calculadora,CotasOverlay cotasOverlay,TextView txtInstruccion) {
+    public static void mostrar(Context context, List<Pieza> listaPiezas, PiezaAdapter piezaAdapter, AreaCalculator calculadora, CotasOverlay cotasOverlay, TextView txtInstruccion) {
 
         Log.d(TAG, "inflando formulario");
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_agregar_pieza, null);
@@ -32,47 +32,10 @@ public class FormularioPiezaDialog {
         final EditText etAlto = dialogView.findViewById(R.id.etAlto);
         final EditText etLargo = dialogView.findViewById(R.id.etLargo);
         final EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
-        final TextView tvTotalM2 = dialogView.findViewById(R.id.tvTotalM2);
-       // final Button btnDIMedir = dialogView.findViewById(R.id.btnDIMedir);
-        //final Button btnDIEtiquetar = dialogView.findViewById(R.id.btnDIEtiquetar);
-        final Button btnCalcular = dialogView.findViewById(R.id.btnCalcular);
         final TextView lblLargo = dialogView.findViewById(R.id.lblLargo);
         final TextView textViewM = dialogView.findViewById(R.id.textViewM);
         final TextView textView2 = dialogView.findViewById(R.id.textView2);
-
-//        spinnerUnidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String unidad = parent.getItemAtPosition(position).toString();
-//
-//                switch (unidad) {
-//                    case "Centímetros":
-//                        textViewM.setText("(cm)");
-//                        textView2.setText("(unid)"); // puedes dejarlo fijo o adaptarlo también
-//                        break;
-//                    case "Milímetros":
-//                        textViewM.setText("(mm)");
-//                        textView2.setText("(unid)");
-//                        break;
-//                    case "Pulgadas":
-//                        textViewM.setText("( \")");
-//                        textView2.setText("(unid)");
-//                        break;
-//                    default:
-//                        textViewM.setText("(m)");
-//                        textView2.setText("(unid)");
-//                        break;
-//                }
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {}
-//        });
-
-
-
-
-
+        final EditText etDescripcionPieza = dialogView.findViewById(R.id.etDescripcionPieza);
 
 
 
@@ -80,86 +43,134 @@ public class FormularioPiezaDialog {
         final String[] tiposMaterial = {"Cuadrado", "Circular", "Plancha", "Ángulo", "Viga H ", "Otro"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_item, tiposMaterial);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
         spinnerMaterial.setAdapter(adapter);
 
-        // Botón Calcular
-        btnCalcular.setOnClickListener(v -> {
-            String material = spinnerMaterial.getSelectedItem().toString();
-            String sAncho = etAncho.getText().toString().trim();
-            String sAlto = etAlto.getText().toString().trim();
-            String sLargo = etLargo.getText().toString().trim();
-            String sCantidad = etCantidad.getText().toString().trim();
+// 👇 Agrega aquí el listener dinámico
+        spinnerMaterial.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String seleccionado = parent.getItemAtPosition(position).toString();
 
-            try {
-                float ancho = sAncho.isEmpty() ? 0 : Float.parseFloat(sAncho);
-                float alto = sAlto.isEmpty() ? 0 : Float.parseFloat(sAlto);
-                float largo = sLargo.isEmpty() ? 0 : Float.parseFloat(sLargo);
-                int cantidad = sCantidad.isEmpty() ? 0 : Integer.parseInt(sCantidad);
+                switch (seleccionado) {
+                    case "Cuadrado":
+                        Log.d(TAG, "Perfil cuadrado");
+                        etAncho.setVisibility(View.VISIBLE);
+                        etAlto.setVisibility(View.VISIBLE);
+                        textX.setVisibility(View.VISIBLE);
+                        etAncho.setHint("Lado 1");
+                        etAlto.setHint("Lado 2");
+                        lblLargo.setVisibility(View.VISIBLE);
+                        etLargo.setVisibility(View.VISIBLE);
+                        textViewM.setVisibility(View.VISIBLE);
+                        break;
 
-                float areaPorPieza = calculadora.calcularArea(material, ancho, alto, largo);
-                float totalM2 = areaPorPieza * cantidad;
+                    case "Circular":
+                        Log.d(TAG, "Perfil circular");
+                        etAncho.setVisibility(View.VISIBLE);
+                        etAlto.setVisibility(View.GONE);
+                        textX.setVisibility(View.GONE);
+                        etAncho.setHint("Diámetro");
+                        lblLargo.setVisibility(View.VISIBLE);
+                        etLargo.setVisibility(View.VISIBLE);
+                        textViewM.setVisibility(View.VISIBLE);
+                        break;
 
-                tvTotalM2.setText(String.format("Total m²: %.3f", totalM2));
-            } catch (Exception e) {
-                Toast.makeText(context, "Error en los datos", Toast.LENGTH_SHORT).show();
+                    case "Plancha":
+                        Log.d(TAG, "Perfil plancha");
+                        etAncho.setVisibility(View.VISIBLE);
+                        etAlto.setVisibility(View.VISIBLE);
+                        textX.setVisibility(View.VISIBLE);
+                        etAncho.setHint("Ancho");
+                        etAlto.setHint("Alto");
+                        lblLargo.setVisibility(View.GONE);
+                        etLargo.setVisibility(View.GONE);
+                        textViewM.setVisibility(View.GONE);
+                        break;
+
+                    default:
+                        etAncho.setVisibility(View.VISIBLE);
+                        etAlto.setVisibility(View.VISIBLE);
+                        textX.setVisibility(View.VISIBLE);
+                        etAncho.setHint("Lado 1");
+                        etAlto.setHint("Lado 2");
+                        lblLargo.setVisibility(View.VISIBLE);
+                        etLargo.setVisibility(View.VISIBLE);
+                        textViewM.setVisibility(View.VISIBLE);
+                        break;
+                }
             }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
         });
 
-        // Botón Agregar
+
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setView(dialogView)
-                .setPositiveButton("Agregar", null)
-                .setNegativeButton("Cancelar", null);
+        builder.setView(dialogView).setPositiveButton("Agregar", null).setNegativeButton("Cancelar", null);
+
+
+
 
         AlertDialog dialog = builder.create();
         dialog.show();
 
-//        // 🔹 Listener de btnDIMedir
-//        btnDIMedir.setOnClickListener(v -> {
-//            iniciarMedicion(dialog, cotasOverlay, txtInstruccion);
-//        });
-//
 
-
-
-        // Sobrescribir click en el botón Agregar
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try {
-                String tipoMaterial = spinnerMaterial.getSelectedItem().toString();
+                // 1️⃣ Lee los EditText
+
                 float ancho = etAncho.getText().toString().isEmpty() ? 0 : Float.parseFloat(etAncho.getText().toString());
                 float alto = etAlto.getText().toString().isEmpty() ? 0 : Float.parseFloat(etAlto.getText().toString());
                 float largo = etLargo.getText().toString().isEmpty() ? 0 : Float.parseFloat(etLargo.getText().toString());
                 int cantidad = etCantidad.getText().toString().isEmpty() ? 0 : Integer.parseInt(etCantidad.getText().toString());
+                String descripcionPieza = etDescripcionPieza.getText().toString().trim();
 
-                String dimensiones = String.format("%.0f\" x %.0f\" x %.0fm", ancho, alto, largo);
+                Log.d(TAG, "descripcion=" + descripcionPieza + ", ancho=" + ancho + ", alto=" + alto + ", largo=" + largo + ", cantidad=" + cantidad);
+
+                // 2️⃣ Obtiene el material
+                String tipoMaterial = spinnerMaterial.getSelectedItem().toString();
+              //  Log.d(TAG, "Paso 2: tipoMaterial=" + tipoMaterial);
+
+                // 3️⃣ Calcula área por pieza
                 float areaPorPieza = calculadora.calcularArea(tipoMaterial, ancho, alto, largo);
+                //Log.d(TAG, "Paso 3: areaPorPieza=" + areaPorPieza);
+
+                // 4️⃣ Multiplica por cantidad
                 float totalM2 = areaPorPieza * cantidad;
+                //Log.d(TAG, "Paso 4: totalM2=" + totalM2);
 
-                listaPiezas.add(new Pieza(tipoMaterial, dimensiones, cantidad, totalM2));
+                // 5️⃣ Crea objeto Pieza
+                Pieza nuevaPieza = new Pieza(tipoMaterial, ancho, alto, largo, cantidad, totalM2,descripcionPieza);
+                //Log.d(TAG, "nuevaPieza creada -> " + nuevaPieza);
+
+                // 6️⃣ Lo agrega a la lista
+                listaPiezas.add(nuevaPieza);
+                Log.d(TAG, "listaPiezas size=" + listaPiezas.size());
+
+                // 7️⃣ Notifica al adaptador
                 piezaAdapter.notifyDataSetChanged();
+                Log.d(TAG, "RecyclerView notificado");
 
+                // 8️⃣ Muestra Toast
                 Toast.makeText(context, "Pieza agregada correctamente", Toast.LENGTH_SHORT).show();
+               // Log.d(TAG, "Paso 8: Toast mostrado");
+
+                // 9️⃣ Cierra el diálogo
                 dialog.dismiss();
+                Log.d(TAG, "diálogo cerrado");
+
             } catch (Exception e) {
+                Log.e(TAG, "Error al procesar los datos", e);
                 Toast.makeText(context, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
-
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etAncho, "Ancho");
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etAlto, "Alto");
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etLargo, "Largo");
 
 
     }
-
-
-
-
-
 
     private static void configurarCampoMedicion(Context context, AlertDialog dialog,
                                                 CotasOverlay cotasOverlay, TextView txtInstruccion,
@@ -172,9 +183,9 @@ public class FormularioPiezaDialog {
         editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
                 editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_medir, 0);
-                Log.d(TAG, "FOCO_" + nombreCampo);
+               // Log.d(TAG, "FOCO_" + nombreCampo);
             } else {
-                Log.d(TAG, "PERDER_FOCO_" + nombreCampo + " → ocultar icono y reset contador");
+                //Log.d(TAG, "PERDER_FOCO_" + nombreCampo + " → ocultar icono y reset contador");
                 editText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                 editText.setTag(0);
             }
@@ -216,10 +227,10 @@ public class FormularioPiezaDialog {
                     editText.setTag(count);
 
                     if (count == 1) {
-                        Log.d(TAG, "1ER_TOQUE_" + nombreCampo + " → solo icono, sin teclado");
+                        //Log.d(TAG, "1ER_TOQUE_" + nombreCampo + " → solo icono, sin teclado");
                         editText.setShowSoftInputOnFocus(false);
                     } else if (count == 2) {
-                        Log.d(TAG, "2DO_TOQUE_" + nombreCampo + " → abrir teclado");
+                        //Log.d(TAG, "2DO_TOQUE_" + nombreCampo + " → abrir teclado");
                         editText.setShowSoftInputOnFocus(true);
                         editText.postDelayed(() -> {
                             InputMethodManager imm = (InputMethodManager)
@@ -267,17 +278,36 @@ public class FormularioPiezaDialog {
         });
     }
 
-
-
-
-
-
-
-
-
-
-
-
+//
+//    FormularioPiezaDialog.AreaCalculator calculadora = (tipoMaterial, ancho, alto, largo) -> {
+//        switch (tipoMaterial) {
+//            case "Cuadrado":
+//                // Sección rectangular: ancho * alto, luego * largo
+//                return (ancho * alto) * largo;
+//
+//            case "Circular":
+//                // diámetro = ancho, radio = diámetro/2
+//                float radio = ancho / 2f;
+//                return (float) (Math.PI * Math.pow(radio, 2)) * largo;
+//
+//            case "Plancha":
+//                // Solo ancho x alto (lámina)
+//                return ancho * alto;
+//
+//            case "Ángulo":
+//                // Ejemplo simple: área de L (ancho * alto / 2), luego * largo
+//                return ((ancho * alto) / 2f) * largo;
+//
+//            case "Viga H":
+//                // Aquí depende de la fórmula que uses para el perfil H
+//                // De momento un ejemplo simple (ancho * alto) * largo
+//                return (ancho * alto) * largo;
+//
+//            default:
+//                // Otro perfil → tratarlo como rectángulo
+//                return (ancho * alto) * largo;
+//        }
+//    };
 
 
 
