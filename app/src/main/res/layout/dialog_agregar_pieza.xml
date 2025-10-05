@@ -204,6 +204,7 @@
         android:layout_marginTop="8dp"
         android:hint="Descripción (opcional)"
         android:padding="12dp"
+        android:inputType="textCapSentences"
         app:layout_constraintEnd_toStartOf="@+id/cbRecordar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/lblDescripcion" />

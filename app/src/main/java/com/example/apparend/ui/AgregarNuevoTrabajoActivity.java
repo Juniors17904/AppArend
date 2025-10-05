@@ -26,7 +26,7 @@ import java.util.List;
 
 public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
 
-    private static final String TAG = "arenado Agregar Nuevo Trabajo";
+    private static final String TAG = "Agregar Nuevo Trabajo arenado";
 
     EditText etCliente, etDescripcion;
     Button btnAgregarEstructura, btnGenerarReporte, btnGuardarTrabajo;
@@ -106,7 +106,7 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
         // Lógica para finalizar el trabajo
         btnGuardarTrabajo.setOnClickListener(v -> {
             guardarTrabajo();
-            finish();
+
         });
     }
 
@@ -153,14 +153,49 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
     }
 
 //    private void guardarTrabajo() {
-//        String cliente = etCliente.getText().toString();
-//        String descripcion = etDescripcion.getText().toString();
+//        String cliente = etCliente.getText().toString().trim();
+//        String descripcion = etDescripcion.getText().toString().trim();
 //        String fechaHora = tvFechaHora.getText().toString();
 //
+//        // 🔹 Validaciones
+//        if (cliente.isEmpty()) {
+//            Toast.makeText(this, "Ingresa el nombre del cliente", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (listaEstructuras.isEmpty()) {
+//            Toast.makeText(this, "Debes agregar al menos una estructura", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        // 🔹 Insertar el trabajo en BD
 //        TrabajoDao trabajoDao = new TrabajoDao(this);
 //        long idTrabajo = trabajoDao.insertTrabajo(cliente, descripcion, fechaHora);
+//        Log.d(TAG, "Trabajo guardado en BD con id=" + idTrabajo);
 //
-//        Log.d(TAG, "Trabajo guardado en BD con id=" + idTrabajo + " cliente=" + cliente + " descripcion=" + descripcion + " fechaHora=" + fechaHora);
+//        // 🔹 Insertar estructuras y piezas
+//        EstructuraDao estructuraDao = new EstructuraDao(this);
+//        PiezaDao piezaDao = new PiezaDao(this);
+//
+//        for (Estructura estructura : listaEstructuras) {
+//            long idEstructura = estructuraDao.insertEstructura(
+//                    (int) idTrabajo,
+//                    estructura.getDescripcion(),
+//                    estructura.getImagenUri()
+//            );
+//            Log.d(TAG, "Estructura guardada con id=" + idEstructura);
+//
+//            if (estructura.getListaPiezas() != null) {
+//                for (Pieza pieza : estructura.getListaPiezas()) {
+//                    long idPieza = piezaDao.insertPieza(pieza, (int) idEstructura);
+//                    Log.d(TAG, "Pieza guardada con id=" + idPieza);
+//                }
+//            }
+//        }
+//
+//        Toast.makeText(this, "Trabajo completo guardado en BD", Toast.LENGTH_LONG).show();
+//        Log.i(TAG, "Trabajo completo guardado en BD con todas sus estructuras y piezas.");
+//
+//        finish();
 //    }
 
     private void guardarTrabajo() {
@@ -178,77 +213,51 @@ public class AgregarNuevoTrabajoActivity extends AppCompatActivity {
             return;
         }
 
-        // 🔹 Insertar el trabajo en BD
-        TrabajoDao trabajoDao = new TrabajoDao(this);
-        long idTrabajo = trabajoDao.insertTrabajo(cliente, descripcion, fechaHora);
-        Log.d(TAG, "Trabajo guardado en BD con id=" + idTrabajo);
+        try {
+            // Guardar Trabajo
+            TrabajoDao trabajoDao = new TrabajoDao(this);
+            long idTrabajo = trabajoDao.insertTrabajo(cliente, descripcion, fechaHora);
+            Log.d(TAG, "✅ Trabajo guardado en BD con id=" + idTrabajo);
 
-        // 🔹 Insertar estructuras y piezas
-        EstructuraDao estructuraDao = new EstructuraDao(this);
-        PiezaDao piezaDao = new PiezaDao(this);
+            // Guardar estructuras y piezas
+            EstructuraDao estructuraDao = new EstructuraDao(this);
+            PiezaDao piezaDao = new PiezaDao(this);
 
-        for (Estructura estructura : listaEstructuras) {
-            long idEstructura = estructuraDao.insertEstructura(
-                    (int) idTrabajo,
-                    estructura.getDescripcion(),
-                    estructura.getImagenUri()
-            );
-            Log.d(TAG, "Estructura guardada con id=" + idEstructura);
+            for (Estructura estructura : listaEstructuras) {
+                try {
+                    long idEstructura = estructuraDao.insertEstructura(
+                            (int) idTrabajo,
+                            estructura.getDescripcion(),
+                            estructura.getImagenUri()
+                    );
+                    Log.d(TAG, "✅ Estructura guardada con id=" + idEstructura);
 
-            if (estructura.getListaPiezas() != null) {
-                for (Pieza pieza : estructura.getListaPiezas()) {
-                    long idPieza = piezaDao.insertPieza(pieza, (int) idEstructura);
-                    Log.d(TAG, "Pieza guardada con id=" + idPieza);
+                    if (estructura.getListaPiezas() != null) {
+                        for (Pieza pieza : estructura.getListaPiezas()) {
+                            try {
+                                long idPieza = piezaDao.insertPieza(pieza, (int) idEstructura);
+                                Log.d(TAG, "✅ Pieza guardada con id=" + idPieza);
+                            } catch (Exception e) {
+                                Log.e(TAG, "⚠️ Error al guardar pieza: " + pieza.getDescripcion(), e);
+                            }
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "⚠️ Error al guardar estructura: " + estructura.getDescripcion(), e);
                 }
             }
+
+            Toast.makeText(this, "Trabajo completo guardado en BD", Toast.LENGTH_LONG).show();
+            Log.i(TAG, "✅ Trabajo completo guardado en BD con todas sus estructuras y piezas.");
+
+            finish();
+
+        } catch (Exception e) {
+            Log.e(TAG, "⚠️ Error general al guardar el trabajo", e);
+            Toast.makeText(this, "Error al guardar el trabajo", Toast.LENGTH_SHORT).show();
         }
-
-        Toast.makeText(this, "Trabajo completo guardado en BD", Toast.LENGTH_LONG).show();
-        Log.i(TAG, "Trabajo completo guardado en BD con todas sus estructuras y piezas.");
-
-        finish();
     }
 
-
-//    // ---- Método corregido ----
-//    private void guardarTrabajo() {
-//        String cliente = etCliente.getText().toString();
-//        String descripcion = etDescripcion.getText().toString();
-//        String fechaHora = tvFechaHora.getText().toString();
-//
-//        // 🔹 Insertar el trabajo en BD
-//        TrabajoDao trabajoDao = new TrabajoDao(this);
-//        long idTrabajo = trabajoDao.insertTrabajo(cliente, descripcion, fechaHora);
-//
-//        Log.d(TAG, "Trabajo guardado en BD con id=" + idTrabajo);
-//
-//        // 🔹 Insertar las estructuras en BD
-//        if (!listaEstructuras.isEmpty()) {
-//            EstructuraDao estructuraDao = new EstructuraDao(this);
-//            PiezaDao piezaDao = new PiezaDao(this);
-//
-//            for (Estructura estructura : listaEstructuras) {
-//                // insertar estructura asociada al trabajo
-//                long idEstructura = estructuraDao.insertEstructura(
-//                        (int) idTrabajo,
-//                        estructura.getDescripcion(),
-//                        estructura.getImagenUri()
-//                );
-//
-//                Log.d(TAG, "Estructura guardada con id=" + idEstructura);
-//
-//                // insertar piezas de esa estructura
-//                if (estructura.getListaPiezas() != null) {
-//                    for (Pieza pieza : estructura.getListaPiezas()) {
-//                        long idPieza = piezaDao.insertPieza(pieza, (int) idEstructura);
-//                        Log.d(TAG, "Pieza guardada con id=" + idPieza);
-//                    }
-//                }
-//            }
-//        }
-//
-//        Log.i(TAG, "Trabajo completo guardado en BD con todas sus estructuras y piezas.");
-//    }
 
 
 

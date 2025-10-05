@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CotasOverlay extends View {
-    private static final String TAG = "arenado Cotas Overlay";
+    private static final String TAG = "Cotas Overlay arenado";
     private Paint paint = new Paint();
     private PointF start, end;
     private boolean drawingEnabled = false;
@@ -317,6 +317,15 @@ public class CotasOverlay extends View {
 
 
 
+//------------------------------
+
+    public PointF getUltimoStart() {
+        return startPoints.isEmpty() ? null : startPoints.get(startPoints.size() - 1);
+    }
+
+    public PointF getUltimoEnd() {
+        return endPoints.isEmpty() ? null : endPoints.get(endPoints.size() - 1);
+    }
 
 }
 

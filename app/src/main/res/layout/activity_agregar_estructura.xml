@@ -64,20 +64,31 @@
         app:strokeColor="#DDDDDD"
         app:strokeWidth="2dp" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Descripcion"
+        android:textSize="18sp"
+        android:textColor="#333333"
+        android:layout_marginBottom="4dp"/>
+
     <!-- Descripción -->
+
+    <!-- Botón para agregar pieza -->
     <EditText
         android:id="@+id/etDescripcionPieza"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_style"
-        android:hint="Descripción de la estructura..."
+        android:hint="Ejemp: Puerta, tubo , baranda, etc"
         android:imeOptions="actionDone"
-        android:inputType="textMultiLine"
+        android:inputType="textCapSentences"
         android:maxLines="3"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:textColor="@color/colorTextoClaro"
+        android:textColorHint="@color/Hint_selected" />
 
-    <!-- Botón para agregar pieza -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAgregarPieza"
         android:layout_width="match_parent"

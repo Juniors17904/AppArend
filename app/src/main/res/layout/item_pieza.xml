@@ -1,85 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp"
-    android:background="@drawable/item_background"
-    android:layout_marginBottom="10dp">
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="6dp">
 
-    <!-- Material -->
-    <TextView
-        android:id="@+id/tvMaterial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Material: "
-        android:textStyle="bold"
-        android:textSize="16sp"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="6dp"/>
-
-    <!-- Descripción -->
-    <TextView
-        android:id="@+id/tvDescripcion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Descripción: "
-        android:textSize="14sp"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Fila con dimensiones -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginBottom="8dp">
+        android:orientation="vertical"
+        android:padding="12dp">
 
+        <!-- Material -->
+        <TextView
+            android:id="@+id/tvMaterial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Material: "
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:layout_marginBottom="4dp"/>
+
+        <!-- Descripción -->
+        <TextView
+            android:id="@+id/tvDescripcion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Descripción: "
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginBottom="6dp"/>
+
+        <!-- Cantidad -->
         <TextView
             android:id="@+id/tvCantidad"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Cantidad: 0"
+            android:textStyle="bold"
             android:textSize="14sp"
-            android:textStyle="bold" />
+            android:layout_marginBottom="6dp"/>
 
-        <TextView
-            android:id="@+id/tvAncho"
-            android:layout_width="0dp"
+        <!-- Fila con dimensiones -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Ancho: 0.00"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:weightSum="3"
+            android:layout_marginBottom="8dp">
 
+            <TextView
+                android:id="@+id/tvAncho"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ancho: 0.00"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvAlto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Alto: 0.00"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tvLargo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Largo: 0.00"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- Total m² -->
         <TextView
-            android:id="@+id/tvAlto"
-            android:layout_width="0dp"
+            android:id="@+id/tvTotalM2"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Alto: 0.00"
-            android:textSize="14sp" />
+            android:text="Total: 0.00 m²"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@android:color/holo_blue_dark"
+            android:layout_marginTop="4dp"/>
     </LinearLayout>
-
-    <!-- Largo -->
-    <TextView
-        android:id="@+id/tvLargo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Largo: 0.00"
-        android:textSize="14sp"
-        android:layout_marginBottom="6dp"/>
-
-    <!-- Total m² -->
-    <TextView
-        android:id="@+id/tvTotalM2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total: 0.00 m²"
-        android:textStyle="bold|italic"
-        android:textSize="15sp"
-        android:layout_marginTop="4dp"
-        android:textColor="@android:color/holo_blue_dark" />
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

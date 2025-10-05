@@ -31,17 +31,19 @@
         android:id="@+id/etCliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del Cliente"
-        android:inputType="text"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_style"
+        android:hint="Nombre del Cliente"
+        android:inputType="textCapSentences"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/colorTextoClaro"
+        android:textColorHint="@color/Hint_selected" />
 
     <!-- Descripción del trabajo -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Descripción"
+        android:text="Resumen del trabajo"
         android:textSize="18sp"
         android:textColor="#333333"
         android:layout_marginBottom="4dp"/>
@@ -50,11 +52,13 @@
         android:id="@+id/etDescripcionPieza"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Descripción del trabajo"
-        android:inputType="text"
+        android:layout_marginBottom="16dp"
         android:background="@drawable/edittext_style"
+        android:hint="Ejem: Paquete de tubos, barandas, etc."
+        android:inputType="textCapSentences"
         android:padding="12dp"
-        android:layout_marginBottom="16dp"/>
+        android:textColor="@color/black"
+        android:textColorHint="@color/Hint_selected" />
 
     <!-- Fecha y Hora actuales -->
     <TextView
@@ -70,6 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Fecha: 2025-09-14, Hora: 14:00"
+        android:background="@drawable/edittext_style"
         android:textSize="16sp"
         android:textColor="#333333"
         android:layout_marginBottom="16dp"/>
@@ -95,12 +100,9 @@
         android:text="Lista"
         android:textColor="#333333"
         android:textSize="18sp"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
-    <!-- Cabecera fija -->
-    <include
-        layout="@layout/header_estructuras"
-        android:visibility="visible" />
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEstructura"

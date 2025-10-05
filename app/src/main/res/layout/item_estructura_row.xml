@@ -1,38 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:background="@drawable/edittext_style">
-
-    <ImageView
-        android:id="@+id/imgEstructura"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/ic_launcher" />
+    android:layout_margin="8dp"
+    card_view:cardCornerRadius="12dp"
+    card_view:cardElevation="4dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_weight="1"
-        android:paddingStart="8dp">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/tvDescripcion"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Descripción"
-            android:textStyle="bold"
-            android:textSize="16sp" />
+        <!-- Imagen -->
+        <ImageView
+            android:id="@+id/imgEstructura"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher"
+            android:clipToOutline="true" />
 
-        <TextView
-            android:id="@+id/tvMetros"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="M²: 0.00"
-            android:textSize="14sp" />
+        <!-- Contenedor de textos -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:paddingStart="12dp">
+
+            <!-- Descripción -->
+            <TextView
+                android:id="@+id/tvDescripcion"
+                android:layout_width="match_parent"
+                android:layout_height="39dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Descripción"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Metros cuadrados -->
+            <TextView
+                android:id="@+id/tvMetros"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="6dp"
+                android:text="M²"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+</androidx.cardview.widget.CardView>

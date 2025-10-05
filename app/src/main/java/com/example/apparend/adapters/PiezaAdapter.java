@@ -38,17 +38,40 @@ public class PiezaAdapter extends RecyclerView.Adapter<PiezaAdapter.PiezaViewHol
         return new PiezaViewHolder(view);
     }
 
+//
 //    @Override
 //    public void onBindViewHolder(@NonNull PiezaViewHolder holder, int position) {
 //        Pieza pieza = listaPiezas.get(position);
 //
-//        holder.tvMaterial.setText(pieza.getTipoMaterial());
-//        holder.tvCantidad.setText(String.valueOf(pieza.getCantidad()));
-//        holder.tvAncho.setText(String.format("%.2f", pieza.getAncho()));
-//        holder.tvAlto.setText(String.format("%.2f", pieza.getAlto()));
-//        holder.tvLargo.setText(String.format("%.2f", pieza.getLargo()));
-//        holder.tvTotalM2.setText(String.format("%.2f m²", pieza.getTotalM2()));
-//        holder.tvDescripcion.setText(pieza.getDescripcion());
+//        holder.tvMaterial.setText("Perfil: " + pieza.getTipoMaterial());
+//        holder.tvDescripcion.setText("Descripción: " + pieza.getDescripcion());
+//        holder.tvCantidad.setText("Cantidad: " + pieza.getCantidad());
+//
+//        // 👉 Personalizar según perfil
+//        switch (pieza.getTipoMaterial()) {
+//            case "Circular":
+//                holder.tvAncho.setText("Diámetro: " + String.format("%.2f", pieza.getAncho()));
+//                holder.tvAlto.setVisibility(View.GONE);
+//                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+//                break;
+//
+//            case "Plancha":
+//                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
+//                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+//                holder.tvAlto.setVisibility(View.VISIBLE);
+//                holder.tvLargo.setVisibility(View.GONE); // la plancha no usa largo
+//                break;
+//
+//            default: // Cuadrado, Ángulo, Viga H, Otro...
+//                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
+//                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+//                holder.tvAlto.setVisibility(View.VISIBLE);
+//                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+//                holder.tvLargo.setVisibility(View.VISIBLE);
+//                break;
+//        }
+//
+//        holder.tvTotalM2.setText("Total: " + String.format("%.2f m²", pieza.getTotalM2()));
 //
 //        // ✅ Click corto → editar
 //        holder.itemView.setOnClickListener(v -> {
@@ -64,17 +87,41 @@ public class PiezaAdapter extends RecyclerView.Adapter<PiezaAdapter.PiezaViewHol
 //            return false;
 //        });
 //    }
+//
 
     @Override
     public void onBindViewHolder(@NonNull PiezaViewHolder holder, int position) {
         Pieza pieza = listaPiezas.get(position);
 
-        holder.tvMaterial.setText("Material: " + pieza.getTipoMaterial());
+        holder.tvMaterial.setText("Perfil: " + pieza.getTipoMaterial());
         holder.tvDescripcion.setText("Descripción: " + pieza.getDescripcion());
         holder.tvCantidad.setText("Cantidad: " + pieza.getCantidad());
-        holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
-        holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
-        holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+
+        // 👉 Personalizar según perfil
+        switch (pieza.getTipoMaterial()) {
+            case "Circular":
+                holder.tvAncho.setText("Diámetro: " + String.format("%.2f", pieza.getAncho()));
+                holder.tvAlto.setVisibility(View.GONE); // no aplica
+                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+                holder.tvLargo.setVisibility(View.VISIBLE);
+                break;
+
+            case "Plancha":
+                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
+                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+                holder.tvAlto.setVisibility(View.VISIBLE);
+                holder.tvLargo.setVisibility(View.GONE); // la plancha no usa largo
+                break;
+
+            default: // Cuadrado, Ángulo, Viga H, Otro...
+                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
+                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+                holder.tvAlto.setVisibility(View.VISIBLE);
+                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+                holder.tvLargo.setVisibility(View.VISIBLE);
+                break;
+        }
+
         holder.tvTotalM2.setText("Total: " + String.format("%.2f m²", pieza.getTotalM2()));
 
         // ✅ Click corto → editar

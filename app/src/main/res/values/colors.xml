@@ -6,4 +6,7 @@
     <color name="blue_selected">#FF1976D2</color>
     <color name="red">#FFF44336</color>
     <color name="red_selected">#FFD32F2F</color>
+    <color name="colorTextoClaro">#000000</color> <!-- negro -->
+    <color name="colorTextoOscuro">#FFFFFF</color> <!-- blanco -->
+    <color name="Hint_selected">#ADA8A8</color>
 </resources>

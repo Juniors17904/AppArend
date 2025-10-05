@@ -33,6 +33,7 @@ public class FormularioPiezaDialog {
         final EditText etLargo = dialogView.findViewById(R.id.etLargo);
         final EditText etCantidad = dialogView.findViewById(R.id.etCantidad);
         final TextView lblLargo = dialogView.findViewById(R.id.lblLargo);
+        final TextView lblLado = dialogView.findViewById(R.id.lblLado);
         final TextView textViewM = dialogView.findViewById(R.id.textViewM);
         final TextView textView2 = dialogView.findViewById(R.id.textView2);
         final EditText etDescripcionPieza = dialogView.findViewById(R.id.etDescripcionPieza);
@@ -59,6 +60,7 @@ public class FormularioPiezaDialog {
                         etAlto.setVisibility(View.VISIBLE);
                         textX.setVisibility(View.VISIBLE);
                         etAncho.setHint("Lado 1");
+                        lblLado.setText("Lados");
                         etAlto.setHint("Lado 2");
                         lblLargo.setVisibility(View.VISIBLE);
                         etLargo.setVisibility(View.VISIBLE);
@@ -71,6 +73,7 @@ public class FormularioPiezaDialog {
                         etAlto.setVisibility(View.GONE);
                         textX.setVisibility(View.GONE);
                         etAncho.setHint("Diámetro");
+                        lblLado.setText("Diametro");
                         lblLargo.setVisibility(View.VISIBLE);
                         etLargo.setVisibility(View.VISIBLE);
                         textViewM.setVisibility(View.VISIBLE);
@@ -83,6 +86,7 @@ public class FormularioPiezaDialog {
                         textX.setVisibility(View.VISIBLE);
                         etAncho.setHint("Ancho");
                         etAlto.setHint("Alto");
+                        lblLado.setText("Lados");
                         lblLargo.setVisibility(View.GONE);
                         etLargo.setVisibility(View.GONE);
                         textViewM.setVisibility(View.GONE);
@@ -94,6 +98,7 @@ public class FormularioPiezaDialog {
                         textX.setVisibility(View.VISIBLE);
                         etAncho.setHint("Lado 1");
                         etAlto.setHint("Lado 2");
+                        lblLado.setText("Lados");
                         lblLargo.setVisibility(View.VISIBLE);
                         etLargo.setVisibility(View.VISIBLE);
                         textViewM.setVisibility(View.VISIBLE);
@@ -115,56 +120,57 @@ public class FormularioPiezaDialog {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-
+//original
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v -> {
             try {
                 // 1️⃣ Lee los EditText
-
                 float ancho = etAncho.getText().toString().isEmpty() ? 0 : Float.parseFloat(etAncho.getText().toString());
                 float alto = etAlto.getText().toString().isEmpty() ? 0 : Float.parseFloat(etAlto.getText().toString());
                 float largo = etLargo.getText().toString().isEmpty() ? 0 : Float.parseFloat(etLargo.getText().toString());
                 int cantidad = etCantidad.getText().toString().isEmpty() ? 0 : Integer.parseInt(etCantidad.getText().toString());
                 String descripcionPieza = etDescripcionPieza.getText().toString().trim();
 
-                Log.d(TAG, "descripcion=" + descripcionPieza + ", ancho=" + ancho + ", alto=" + alto + ", largo=" + largo + ", cantidad=" + cantidad);
-
                 // 2️⃣ Obtiene el material
                 String tipoMaterial = spinnerMaterial.getSelectedItem().toString();
-              //  Log.d(TAG, "Paso 2: tipoMaterial=" + tipoMaterial);
 
                 // 3️⃣ Calcula área por pieza
                 float areaPorPieza = calculadora.calcularArea(tipoMaterial, ancho, alto, largo);
-                //Log.d(TAG, "Paso 3: areaPorPieza=" + areaPorPieza);
 
                 // 4️⃣ Multiplica por cantidad
                 float totalM2 = areaPorPieza * cantidad;
-                //Log.d(TAG, "Paso 4: totalM2=" + totalM2);
 
                 // 5️⃣ Crea objeto Pieza
-                Pieza nuevaPieza = new Pieza(tipoMaterial, ancho, alto, largo, cantidad, totalM2,descripcionPieza);
-                //Log.d(TAG, "nuevaPieza creada -> " + nuevaPieza);
+                Pieza nuevaPieza = new Pieza(tipoMaterial, ancho, alto, largo, cantidad, totalM2, descripcionPieza);
 
                 // 6️⃣ Lo agrega a la lista
                 listaPiezas.add(nuevaPieza);
-                Log.d(TAG, "listaPiezas size=" + listaPiezas.size());
+
+                // 🔹 Log unificado según el perfil
+                Log.d(TAG, "✅ Pieza agregada | Perfil: " + tipoMaterial
+                        + " | Desc: " + descripcionPieza
+                        + (tipoMaterial.equals("Circular") ? " | Diametro=" + ancho : " | Ancho=" + ancho + " | Alto=" + alto)
+                        + (tipoMaterial.equals("Plancha") ? "" : " | Largo=" + largo)
+                        + " | Cant=" + cantidad
+                        + " | Total=" + String.format("%.2f m²", totalM2));
 
                 // 7️⃣ Notifica al adaptador
                 piezaAdapter.notifyDataSetChanged();
-                Log.d(TAG, "RecyclerView notificado");
 
                 // 8️⃣ Muestra Toast
                 Toast.makeText(context, "Pieza agregada correctamente", Toast.LENGTH_SHORT).show();
-               // Log.d(TAG, "Paso 8: Toast mostrado");
 
                 // 9️⃣ Cierra el diálogo
                 dialog.dismiss();
-                Log.d(TAG, "diálogo cerrado");
 
             } catch (Exception e) {
                 Log.e(TAG, "Error al procesar los datos", e);
                 Toast.makeText(context, "Error al procesar los datos", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+
+
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etAncho, "Ancho");
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etAlto, "Alto");
         configurarCampoMedicion(context, dialog, cotasOverlay, txtInstruccion, etLargo, "Largo");
@@ -277,37 +283,6 @@ public class FormularioPiezaDialog {
 
         });
     }
-
-//
-//    FormularioPiezaDialog.AreaCalculator calculadora = (tipoMaterial, ancho, alto, largo) -> {
-//        switch (tipoMaterial) {
-//            case "Cuadrado":
-//                // Sección rectangular: ancho * alto, luego * largo
-//                return (ancho * alto) * largo;
-//
-//            case "Circular":
-//                // diámetro = ancho, radio = diámetro/2
-//                float radio = ancho / 2f;
-//                return (float) (Math.PI * Math.pow(radio, 2)) * largo;
-//
-//            case "Plancha":
-//                // Solo ancho x alto (lámina)
-//                return ancho * alto;
-//
-//            case "Ángulo":
-//                // Ejemplo simple: área de L (ancho * alto / 2), luego * largo
-//                return ((ancho * alto) / 2f) * largo;
-//
-//            case "Viga H":
-//                // Aquí depende de la fórmula que uses para el perfil H
-//                // De momento un ejemplo simple (ancho * alto) * largo
-//                return (ancho * alto) * largo;
-//
-//            default:
-//                // Otro perfil → tratarlo como rectángulo
-//                return (ancho * alto) * largo;
-//        }
-//    };
 
 
 

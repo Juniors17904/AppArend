@@ -11,7 +11,7 @@ import com.example.apparend.R;
 
 public class PantallaInicio extends AppCompatActivity {
 
-    private static final String TAG = "arenado Pantalla Inicio"; // Definimos el tag "arenado" para los logs
+    private static final String TAG = "Pantalla Inicio arenado" ; // Definimos el tag "arenado" para los logs
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
