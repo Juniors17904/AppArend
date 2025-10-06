@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Estructuras (
     FOREIGN KEY(trabajo_id) REFERENCES Trabajos(id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS Piezas (
+CREATE TABLE Piezas (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     estructura_id INTEGER NOT NULL,
     tipoMaterial TEXT NOT NULL,
@@ -26,5 +26,6 @@ CREATE TABLE IF NOT EXISTS Piezas (
     cantidad INTEGER,
     descripcion TEXT,
     totalM2 REAL,
-    FOREIGN KEY(estructura_id) REFERENCES Estructuras(id) ON DELETE CASCADE
+    unidadMedida TEXT DEFAULT 'Metros',
+    FOREIGN KEY(estructura_id) REFERENCES Estructuras(id)
 );

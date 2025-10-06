@@ -38,56 +38,7 @@ public class PiezaAdapter extends RecyclerView.Adapter<PiezaAdapter.PiezaViewHol
         return new PiezaViewHolder(view);
     }
 
-//
-//    @Override
-//    public void onBindViewHolder(@NonNull PiezaViewHolder holder, int position) {
-//        Pieza pieza = listaPiezas.get(position);
-//
-//        holder.tvMaterial.setText("Perfil: " + pieza.getTipoMaterial());
-//        holder.tvDescripcion.setText("Descripción: " + pieza.getDescripcion());
-//        holder.tvCantidad.setText("Cantidad: " + pieza.getCantidad());
-//
-//        // 👉 Personalizar según perfil
-//        switch (pieza.getTipoMaterial()) {
-//            case "Circular":
-//                holder.tvAncho.setText("Diámetro: " + String.format("%.2f", pieza.getAncho()));
-//                holder.tvAlto.setVisibility(View.GONE);
-//                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
-//                break;
-//
-//            case "Plancha":
-//                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
-//                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
-//                holder.tvAlto.setVisibility(View.VISIBLE);
-//                holder.tvLargo.setVisibility(View.GONE); // la plancha no usa largo
-//                break;
-//
-//            default: // Cuadrado, Ángulo, Viga H, Otro...
-//                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
-//                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
-//                holder.tvAlto.setVisibility(View.VISIBLE);
-//                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
-//                holder.tvLargo.setVisibility(View.VISIBLE);
-//                break;
-//        }
-//
-//        holder.tvTotalM2.setText("Total: " + String.format("%.2f m²", pieza.getTotalM2()));
-//
-//        // ✅ Click corto → editar
-//        holder.itemView.setOnClickListener(v -> {
-//            if (listener != null) listener.onEditClick(pieza, position);
-//        });
-//
-//        // ✅ Click largo → eliminar
-//        holder.itemView.setOnLongClickListener(v -> {
-//            if (listener != null) {
-//                listener.onDeleteClick(pieza, position);
-//                return true;
-//            }
-//            return false;
-//        });
-//    }
-//
+
 
     @Override
     public void onBindViewHolder(@NonNull PiezaViewHolder holder, int position) {
@@ -97,39 +48,41 @@ public class PiezaAdapter extends RecyclerView.Adapter<PiezaAdapter.PiezaViewHol
         holder.tvDescripcion.setText("Descripción: " + pieza.getDescripcion());
         holder.tvCantidad.setText("Cantidad: " + pieza.getCantidad());
 
-        // 👉 Personalizar según perfil
+        // Obtener unidad y símbolo
+        String unidad = pieza.getUnidadMedida() != null ? pieza.getUnidadMedida() : "Metros";
+        String simbolo = obtenerSimbolo(unidad);
+
+        // Mostrar valores con su unidad
         switch (pieza.getTipoMaterial()) {
             case "Circular":
-                holder.tvAncho.setText("Diámetro: " + String.format("%.2f", pieza.getAncho()));
-                holder.tvAlto.setVisibility(View.GONE); // no aplica
-                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+                holder.tvAncho.setText("Diámetro: " + formatear(pieza.getAncho()) + " " + simbolo);
+                holder.tvAlto.setVisibility(View.GONE);
+                holder.tvLargo.setText("Largo: " + formatear(pieza.getLargo()) + " m");
                 holder.tvLargo.setVisibility(View.VISIBLE);
                 break;
 
             case "Plancha":
-                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
-                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+                holder.tvAncho.setText("Ancho: " + formatear(pieza.getAncho()) + " " + simbolo);
+                holder.tvAlto.setText("Alto: " + formatear(pieza.getAlto()) + " " + simbolo);
                 holder.tvAlto.setVisibility(View.VISIBLE);
-                holder.tvLargo.setVisibility(View.GONE); // la plancha no usa largo
+                holder.tvLargo.setVisibility(View.GONE);
                 break;
 
             default: // Cuadrado, Ángulo, Viga H, Otro...
-                holder.tvAncho.setText("Ancho: " + String.format("%.2f", pieza.getAncho()));
-                holder.tvAlto.setText("Alto: " + String.format("%.2f", pieza.getAlto()));
+                holder.tvAncho.setText("Ancho: " + formatear(pieza.getAncho()) + " " + simbolo);
+                holder.tvAlto.setText("Alto: " + formatear(pieza.getAlto()) + " " + simbolo);
                 holder.tvAlto.setVisibility(View.VISIBLE);
-                holder.tvLargo.setText("Largo: " + String.format("%.2f", pieza.getLargo()));
+                holder.tvLargo.setText("Largo: " + formatear(pieza.getLargo()) + " m");
                 holder.tvLargo.setVisibility(View.VISIBLE);
                 break;
         }
 
         holder.tvTotalM2.setText("Total: " + String.format("%.2f m²", pieza.getTotalM2()));
 
-        // ✅ Click corto → editar
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onEditClick(pieza, position);
         });
 
-        // ✅ Click largo → eliminar
         holder.itemView.setOnLongClickListener(v -> {
             if (listener != null) {
                 listener.onDeleteClick(pieza, position);
@@ -159,4 +112,23 @@ public class PiezaAdapter extends RecyclerView.Adapter<PiezaAdapter.PiezaViewHol
             tvDescripcion = itemView.findViewById(R.id.tvDescripcion);
         }
     }
+
+
+    private String obtenerSimbolo(String unidad) {
+        switch (unidad) {
+            case "Pulgadas": return "\"";
+            case "Centimetros": return "cm";
+            case "Milimetros": return "mm";
+            case "Metros":
+            default: return "m";
+        }
+    }
+
+    private String formatear(float valor) {
+        valor = Math.round(valor * 100f) / 100f;
+        if (valor == (int) valor) return String.valueOf((int) valor);
+        return String.format("%.2f", valor).replaceAll("0*$", "").replaceAll("\\.$", "");
+    }
+
+
 }
